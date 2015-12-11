@@ -9,6 +9,7 @@ ExUnit.configure exclude: :pending, trace: true
 defmodule KoansTest do
   use ExUnit.Case, async: true
 
+  # @tag :pending
   test "function declaration and invocation" do
     # declare an anonymous function 
     # a and b are /not/ assigned (this doesn't exist in Elixir)
@@ -119,5 +120,37 @@ defmodule KoansTest do
     
     short_divrem = &{div(&1, &2), rem(&1, &2)}
     assert short_divrem.(10, 3) == { 3, 1 }
+  end
+  
+  test "Exercise: Functions-5" do
+    original = Enum.map [1,2,3,4], fn x -> x + 2 end
+    rewritten = Enum.map [1,2,3,4], &(&1 + 2)
+    assert original == rewritten
+    
+#    original = Enum.map [1,2,3,4], fn x -> IO.inspect(x) end
+#    rewritten = Enum.map [1,2,3,4], &(IO.inspect(&1))
+#    rewritten = Enum.map [1,2,3,4], &IO.inspect/1
+#    assert original == rewritten
+  end
+  
+  test "Module" do
+    # woot, I can define a module here?
+    defmodule Times do
+      # this way to declare a named function is actually sugar
+      def double(n) do
+        n * 2
+      end
+      
+      # and the real syntax is just passing a "do" key and a block
+      def triple(n), do: (
+        n * 3
+      )
+      
+      def quadruple(n), do: double(double(n))
+    end
+    
+    assert Times.double(9) == 18
+    assert Times.triple(10) == 30
+    assert Times.quadruple(10) == 40
   end
 end
