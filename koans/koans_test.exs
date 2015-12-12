@@ -79,6 +79,7 @@ defmodule KoansTest do
     name = "Barry"
     
     assert f.() == "Franck"
+    assert f.() != name
     
     f = fn (from) ->
       fn (to) -> "Hello #{to} from #{from}" end
@@ -152,5 +153,80 @@ defmodule KoansTest do
     assert Times.double(9) == 18
     assert Times.triple(10) == 30
     assert Times.quadruple(10) == 40
+  end
+  
+  test "Factorial" do
+    defmodule Factorial do
+      # this is the same function (name + arity is identical)
+      # but different clauses - pattern matched from first to last
+      # as well, of(0) here is the functional anchor
+      def of(0), do: 1
+      # clauses must be grouped together!
+      def of(n), do: n * of(n-1)
+    end
+    
+    assert Factorial.of(0) == 1
+    assert Factorial.of(1) == 1
+    assert Factorial.of(3) == 6
+  end
+  
+  test "ModulesAndFunctions-5" do
+    defmodule GCD do
+      def gcd(x,0), do: x
+      def gcd(x,y), do: gcd(y, rem(x,y))
+    end
+    
+    assert GCD.gcd(10,0) == 10
+    assert GCD.gcd(10,5) == 5
+  end
+  
+  test "Chop" do
+    # defmodule Chop do
+    #   def guess(n, (low.._)) when n == low, do: n
+    #   def guess(n, (_..high)) when n == high, do: n
+    #   def guess(n, (low..high)) when 
+    #   def guess(_, (_.._)), do: "I don't know yet"
+    # end
+    
+#    assert Chop.guess(1, (1..10)) == 1
+#    assert Chop.guess(10, (1..10)) == 10
+#    assert Chop.guess(4, (1..10)) == 4
+  end
+  
+  test "Pipeline" do
+    output = (1..10) |> Enum.map(&(&1 * 10)) |> Enum.filter(&(&1 > 50))
+    assert output == [60, 70, 80, 90, 100]
+  end
+  
+  test "Import" do
+    # this is undocumented (afaik) but seems to work too
+    # import List, [:flatten, 1]
+    # official syntax
+    import List, only: [flatten: 1]
+    assert flatten([1, [2, 3]]) == [1, 2, 3]
+  end
+  
+  test "List of tuples syntax" do
+    assert [flatten: 1, foo: "bar"] == [ { :flatten, 1 },{ :foo, "bar" }]
+  end
+  
+  test "Alias" do
+    alias List, as: MyLinkedList
+    import MyLinkedList, only: [flatten: 1]
+    # NOTE: "alias This.That.FooBar" is the same as
+    # alias This.That.FooBar, as: FooBar
+  end
+  
+  test "Attributes" do
+    defmodule Hello do
+      # Often used like constants in Ruby
+      @planet "Earth"
+      
+      def planet do
+        @planet
+      end
+    end
+    
+    assert Hello.planet == "Earth"
   end
 end
