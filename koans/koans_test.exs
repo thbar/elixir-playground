@@ -327,4 +327,60 @@ defmodule KoansTest do
 
     assert BetterSum.sum([1, 10]) == 11
   end
+
+  test "Custom reduce" do
+    defmodule CustomReduce do
+      def reduce([], value, _fun), do: value
+      def reduce([head|tail], value, fun), do: reduce(tail, fun.(value, head), fun)
+    end
+
+    assert CustomReduce.reduce([1,2,3], 0, &(&1+&2)) == 1 + 2 + 3
+    assert CustomReduce.reduce([1,2,3], 1, &(&1 * &2)) == 1 * 2 * 3
+  end
+
+  test "ListsAndRecursion-1" do
+    defmodule TheList do
+      def mapsum([], _fun), do: 0
+      def mapsum([head|tail], fun), do: mapsum(tail, fun) + fun.(head)
+    end
+
+    assert (TheList.mapsum [1,2,3], &(&1 * &1)) == 14
+  end
+
+  test "ListsAndRecursion-2" do
+    defmodule Max do
+      def max([a]), do: a
+      def max([head | tail]), do: Max._max(head, Max.max(tail))
+      # Note: we can also use Kernel.max here
+      def _max(a, b) when a > b, do: a
+      def _max(a, b) when a <= b, do: b
+    end
+
+    assert Max.max([1, 29, 7, 2, 22]) == 29
+  end
+
+  test "ListsAndRecursion-2-bis" do
+    defmodule Max2 do
+      # this one is more homogeneous, using guard clauses
+      def max([a]), do: a
+      def max([a, b]) when a > b, do: a
+      def max([_a, b]), do: b
+      def max([head | tail]), do: Max2.max([head, Max2.max(tail)])
+    end
+
+    assert Max2.max([1, 29, 7, 2, 22]) == 29
+  end
+
+  test "ListsAndRecursion-3" do
+    defmodule Caesar do
+      def caesar([], _n), do: []
+      def caesar([head|tail], n) do
+        # I could not extract this to caesar([a], n) -> clause error
+        [?a + rem(head - ?a + n, 26) | caesar(tail, n)]
+      end
+    end
+
+#    assert Caesar.caesar('ryvkve', 13) == 'elixir'
+    assert Caesar.caesar('ry', 13) == 'el'
+  end
 end
