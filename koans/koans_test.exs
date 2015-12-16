@@ -269,4 +269,62 @@ defmodule KoansTest do
     # Exercise does not require to actually parse but just list libraries
     # This one could work https://github.com/devinus/poison
   end
+
+  test "Recursive list len" do
+    defmodule MyList do
+      def length([]), do: 0
+      # I need MyList here otherwise conflict with Kernel, apparently
+      def length([_head|tail]), do: 1 + MyList.length(tail)
+    end
+
+    assert MyList.length([]) == 0
+    assert MyList.length([1, 1, 1]) == 3
+  end
+
+  test "Recursive list building" do
+    defmodule SquareList do
+      def square([]), do: []
+      def square([head|tail]), do: [head*head | square(tail)]
+    end
+
+    assert SquareList.square([2, 4]) == [4, 16]
+
+    defmodule AddList do
+      def add_1([]), do: []
+      def add_1([head|tail]), do: [head + 1 | add_1(tail)]
+    end
+
+    assert AddList.add_1([5, 10, 40]) == [6, 11, 41]
+  end
+
+  test "Custom map implementation" do
+    defmodule MyMap do
+      def map([], _func), do: []
+      def map([head|tail], func), do: [func.(head) | map(tail, func)]
+    end
+
+    assert MyMap.map([10, 50], fn (x) -> x > 20 end) == [false, true]
+
+    assert MyMap.map([10, 50], &(&1 * 10)) == [100, 500]
+  end
+
+  test "Recursive sum with state parameter" do
+    defmodule SumParam do
+      def sum([], total), do: total
+      def sum([head|tail], total), do: sum(tail, head+total)
+    end
+
+    assert SumParam.sum([1,10], 0) == 11
+  end
+
+  test "Nicer recursive sum with state parameter" do
+    defmodule BetterSum do
+      def sum(list), do: _sum(list, 0)
+      # use almost same name for humans understanding. also used: do_sum
+      defp _sum([], total), do: total
+      defp _sum([head|tail], total), do: _sum(tail, head + total)
+    end
+
+    assert BetterSum.sum([1, 10]) == 11
+  end
 end
