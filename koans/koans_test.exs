@@ -383,4 +383,67 @@ defmodule KoansTest do
 #    assert Caesar.caesar('ryvkve', 13) == 'elixir'
     assert Caesar.caesar('ry', 13) == 'el'
   end
+
+  test "Filter with pattern matching" do
+    # here we leverage the "deep pattern matchin" to actually filter the head
+    # based on its subpart
+    defmodule Filter do
+      def for_location(_loc_id, []), do: []
+      # this one will only be called for matching records
+      def for_location(loc_id, [ matching_item = [_time, loc_id, _temperature] | tail]) do
+        # we return the matched item itself, then recurse
+        [matching_item | for_location(loc_id, tail)]
+      end
+      # this one will be called for non matching records (non 27)
+      def for_location(loc_id, [ _ | tail]) do
+        for_location(loc_id, tail)
+      end
+    end
+
+    assert Filter.for_location(27, [[0, 27, 100],[0,28,100],[0,27,101]]) == [[0,27,100],[0,27,101]]
+  end
+
+  test "ListsAndRecursion-4" do
+    defmodule MyRList do
+      def span(from, from), do: [from]
+      def span(from, to), do: [from | span(from+1, to)]
+    end
+
+    assert MyRList.span(10, 12) == [10, 11, 12]
+  end
+
+  test "List stuff" do
+    assert [1,2] ++ [3,5] == [1,2,3,5]
+
+    assert List.flatten([1, [2]]) == [1,2]
+
+    # foldr reduces from left to right
+    assert List.foldl([0,1,2,3], "", fn (val, acc) -> "#{val}#{acc}" end) == "3210"
+    # foldr does the reverse
+    assert List.foldr([0,1,2,3], "", fn (val, acc) -> "#{val}#{acc}" end) == "0123"
+
+    assert List.zip([[1,2,3],["red","green","blue"],[:a, :b, :c]]) == [
+      {1, "red", :a},
+      {2, "green", :b},
+      {3, "blue", :c}
+    ]
+
+    # not available anymore apparently (since 1.0)
+    # assert List.unzip([{:a, 3},{:b, 6}]) == [[:a, :b], [3,6]]
+    kw = [
+      {:name, "John"},{:age, 37},
+    ]
+    # find first item having 37 at position 1
+    assert List.keyfind(kw, 37, 1) == {:age, 37}
+    assert List.keyfind(kw, :name, 0) == {:name, "John"}
+
+    # remove item having 37 as value at position 1
+    kw = List.keydelete(kw, 37, 1)
+    assert kw == [{:name, "John"}]
+    assert kw == [name: "John"]
+
+    # replace item having John at position 1
+    kw = List.keyreplace(kw, "John", 1, {:name, "Bob"})
+    assert kw == [name: "Bob"]
+  end
 end
