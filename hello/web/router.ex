@@ -20,6 +20,12 @@ defmodule Hello.Router do
     get "/", PageController, :index
   end
 
+  scope "/api", Hello do
+    pipe_through :api
+
+    get "/hello", HelloController, :api
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", Hello do
   #   pipe_through :api
