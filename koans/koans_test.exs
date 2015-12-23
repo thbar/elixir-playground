@@ -446,4 +446,99 @@ defmodule KoansTest do
     kw = List.keyreplace(kw, "John", 1, {:name, "Bob"})
     assert kw == [name: "Bob"]
   end
+
+  # support duplicate keys ? => Keyword
+  # guaranteed ordered ? => Keyword
+  # pattern matching on content ? => Map
+  # large ? => HashDict (Map is slow in E17, but not in E18)
+  # HashDict is actually going to be deprecated
+  # https://twitter.com/josevalim/status/584842489649041408
+
+  test "Map" do
+    map = %{first_name: "John", last_name: "Barry"}
+    # matching on values is allowed (but not on keys)
+    %{first_name: a_name} = map
+    assert a_name == "John"
+    # you can replace values for existing keys with the pipe
+    map = %{map | first_name: "Marry"}
+    assert map.first_name == "Marry"
+    # you can convert a map into an Enum to then leverage Dict
+
+    # you can add a new key too
+    map = Dict.put(map, :age, 30)
+    assert map.age == 30
+    # but this also works to replace an existing key
+    map = Dict.put(map, :age, 40)
+    assert map.age == 40
+
+    # values are reachable too
+    prices = %{first: 10, second: 20}
+    total = prices |> Dict.values |> Enum.sum
+    assert total == 30
+  end
+
+  test "HashDict" do
+    # it's actually a list of 2-tuples, I think
+    hash_dict = [one: 1, two: 2, three: 3]
+    assert hash_dict |> Dict.values |> Enum.sum == 6
+    assert hash_dict |> Dict.keys == [:one, :two, :three]
+  end
+
+  test "Enum.into" do
+    # can be used to convert one type to another
+    map = %{first: 1, second: 2}
+    hash_dict = Enum.into map, HashDict.new
+    assert hash_dict |> Dict.values |> Enum.sum == 3
+  end
+
+  test "Keyword" do
+    kw = [quantity: 4, quantity: 10]
+    # via regular Dict interface
+    assert Dict.get(kw, :quantity) == 4
+    # via Keyword, we get the duplicates
+    assert Keyword.get_values(kw, :quantity) == [4, 10]
+    # but apparently the values can be retrieved fully
+    assert kw |> Dict.values |> Enum.sum == 14
+  end
+
+  test "Maps parameters pattern matching" do
+    defmodule Matcher do
+      def match(%{name: _name, age: age}) when age < 18 do
+        "Mineur"
+      end
+      def match(_) do
+        "Majeur"
+      end
+    end
+
+    assert Matcher.match(%{name: "Mael", age: 8}) == "Mineur"
+  end
+
+  # must be defined outside the method!
+  defmodule MyRecord do
+    # the Access behaviour can be added to provide square-bracket access
+#    use Access
+
+    defstruct first_name: "", last_name: "", age: nil
+
+    def majeur(record = %MyRecord{}) do
+      record.age >= 18
+    end
+  end
+
+  test "Structures" do
+    # syntax reminder is: like a map, with a kind of class to it
+    record = %MyRecord{first_name: "John"}
+    assert record.first_name == "John"
+
+    record = %MyRecord{record | last_name: "Barry"}
+    assert record.first_name == "John"
+    assert record.last_name == "Barry"
+
+    record = %MyRecord{record | age: 20}
+    assert MyRecord.majeur(record) == true
+
+    # Access protocol
+    assert record[:first_name] == "John"
+  end
 end
