@@ -6,3 +6,10 @@ mix phoenix.new hello
 ```
 
 Replace? (yes?)
+
+# Tring out elements from console
+
+```
+iex -S mix
+Phoenix.View.render(Hello.HelloView, "world.html", %{})
+```
