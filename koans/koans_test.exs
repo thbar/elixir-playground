@@ -538,7 +538,32 @@ defmodule KoansTest do
     record = %MyRecord{record | age: 20}
     assert MyRecord.majeur(record) == true
 
-    # Access protocol
-    assert record[:first_name] == "John"
+    # Access protocol - has been removed!
+    # assert record[:first_name] == "John"
+  end
+
+  defmodule Book do
+    defstruct title: "", owner: nil
+  end
+
+  defmodule Owner do
+    defstruct name: ""
+  end
+
+  test "Nested structures" do
+    owner = %Owner{name: "Thibaut"}
+    assert owner.name == "Thibaut"
+    book = %Book{title: "2001", owner: owner}
+    assert book.owner.name == "Thibaut"
+    # undefined function: KoansTest.Book.fetch/2
+    # assert get_in(book, [:owner, :name]) == "Thibaut"
+  end
+
+  test "Set" do
+    # HashSet is deprecated
+    set = Enum.into 1..5, HashSet.new
+
+    set = Enum.into 1..5, MapSet.new
+    assert MapSet.member?(set, 3) == true
   end
 end
