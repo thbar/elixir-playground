@@ -567,4 +567,30 @@ defmodule KoansTest do
     set = Enum.into 1..5, MapSet.new
     assert MapSet.member?(set, 3) == true
   end
+
+  defmodule MyEnum do
+    def all?(collection, fun) do
+      _all?(collection, fun, true)
+    end
+
+    def _all?([], _fun, result) do
+      result
+    end
+
+    def _all?([head|tail], fun, result) do
+      _all?(tail, fun, result && fun.(head))
+    end
+  end
+
+  test "ListsAndRecursion-5" do
+    even = &(rem(&1, 2) == 0)
+    assert MyEnum.all?([2, 4, 6], even) == true
+    assert MyEnum.all?([1, 4, 6], even) == false
+    assert MyEnum.all?([2, 1, 6], even) == false
+    assert MyEnum.all?([2, 4, 1], even) == false
+    assert MyEnum.all?([2], even) == true
+    assert MyEnum.all?([1], even) == false
+    # convention
+    assert MyEnum.all?([], even) == true
+  end
 end
