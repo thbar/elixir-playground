@@ -1,3 +1,0 @@
-Bonjour <%= @name %>. It works! Foo = <%= @foo %>.
-
-<%= message %>
