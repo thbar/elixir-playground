@@ -1,19 +1,20 @@
 Spoiler ahead! In this repository's `koans/koans_test.exs`, I'm storing my own solutions to the exercises found in [Programming Elixir](https://pragprog.com/book/elixir12/programming-elixir-1-2).
 
-The rest is random tests.
-
-# Installing phoenix
+## Common tasks
 
 ```
-mix archive.install https://github.com/phoenixframework/phoenix/releases/download/v1.1.0/phoenix_new-1.1.0.ez
-mix phoenix.new hello
-```
+# install dependencies
+mix deps.get
 
-Replace? (yes?)
+# clean dependencies
+mix deps.clean --all
 
-# Tring out elements from console
+# check code quality
+mix dogma
 
-```
+# run tests
+elixir *_test.exs
+
+# launch interactive session with mix setup
 iex -S mix
-Phoenix.View.render(Hello.HelloView, "world.html", %{})
 ```
