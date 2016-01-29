@@ -582,7 +582,7 @@ defmodule KoansTest do
     end
   end
 
-  test "ListsAndRecursion-5" do
+  test "ListsAndRecursion-5/all?" do
     even = &(rem(&1, 2) == 0)
     assert MyEnum.all?([2, 4, 6], even) == true
     assert MyEnum.all?([1, 4, 6], even) == false
@@ -593,4 +593,9 @@ defmodule KoansTest do
     # convention
     assert MyEnum.all?([], even) == true
   end
+
+  test "ListsAndRecursion-5/each"
+  test "ListsAndRecursion-5/filter" # you can use if here
+  test "ListsAndRecursion-5/split"
+  test "ListsAndRecursion-5/take"
 end
