@@ -1,2 +1,0 @@
-language: elixir
-script: elixir koans_test.exs
