@@ -213,6 +213,7 @@ defmodule KoansTest do
   test "Alias" do
     alias List, as: MyLinkedList
     import MyLinkedList, only: [flatten: 1]
+    assert flatten([1, [2]]) == [1, 2]
     # NOTE: "alias This.That.FooBar" is the same as
     # alias This.That.FooBar, as: FooBar
   end
@@ -561,7 +562,7 @@ defmodule KoansTest do
 
   test "Set" do
     # HashSet is deprecated
-    set = Enum.into 1..5, HashSet.new
+    _set = Enum.into 1..5, HashSet.new
 
     set = Enum.into 1..5, MapSet.new
     assert MapSet.member?(set, 3) == true
