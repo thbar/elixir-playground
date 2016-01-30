@@ -594,8 +594,27 @@ defmodule KoansTest do
     assert MyEnum.all?([], even) == true
   end
 
-  test "ListsAndRecursion-5/each"
+  # redefinition is possible but will apparently erase the previous one (all)
+  defmodule MyEnumEach do
+    def each([], fun) do
+    end
+
+    def each([head|tail], fun) do
+      fun.(head)
+      each(tail, fun)
+    end
+  end
+
+  test "ListsAndRecursion-5/each" do
+    # works, but commenting to avoid polluting IO
+    # MyEnumEach.each([1,2,3], &(IO.puts "\nI have #{&1}"))
+  end
+
+  @tag :pending
   test "ListsAndRecursion-5/filter" # you can use if here
+  @tag :pending
   test "ListsAndRecursion-5/split"
+  @tag :pending
   test "ListsAndRecursion-5/take"
+
 end
