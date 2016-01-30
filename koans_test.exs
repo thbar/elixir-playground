@@ -686,4 +686,14 @@ defmodule KoansTest do
     assert MyEnumTake.take([1, 2, 3], 0) == []
     assert MyEnumTake.take([1], 2) == [1]
   end
+
+  defmodule MyListFlatten do
+    def flatten(list) do
+    end
+  end
+
+  test "ListsAndRecursion-6/flatten" do
+    assert MyListFlatten.flatten([ 1, [ 2, 3, [4], 5, [[[6]]]]]) == [1,2,3,4,5,6]
+#    assert List.flatten([ 1, [ 2, 3, [4], 5, [[[6]]]]]) == [1,2,3,4,5,6]
+  end
 end
