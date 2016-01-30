@@ -596,7 +596,7 @@ defmodule KoansTest do
 
   # redefinition is possible but will apparently erase the previous one (all)
   defmodule MyEnumEach do
-    def each([], fun) do
+    def each([], _fun) do
     end
 
     def each([head|tail], fun) do
@@ -610,11 +610,80 @@ defmodule KoansTest do
     # MyEnumEach.each([1,2,3], &(IO.puts "\nI have #{&1}"))
   end
 
-  @tag :pending
-  test "ListsAndRecursion-5/filter" # you can use if here
-  @tag :pending
-  test "ListsAndRecursion-5/split"
-  @tag :pending
-  test "ListsAndRecursion-5/take"
+  defmodule MyEnumFilter do
+    def filter([], _fun) do
+      []
+    end
 
+    def filter([head|tail], fun) do
+      if fun.(head) do
+        [head|filter(tail,fun)]
+      else
+        filter(tail,fun)
+      end
+    end
+  end
+
+  test "ListsAndRecursion-5/filter" do
+    even = &(rem(&1, 2) == 0)
+    assert MyEnumFilter.filter([1,2,3,4,5], even) == [2,4]
+    assert MyEnumFilter.filter([1,1,2,4,4], even) == [2,4,4]
+    assert MyEnumFilter.filter([], even) == []
+  end
+
+  defmodule MyEnumSplit do
+    def split(collection, expected_count) do
+      _split(collection, expected_count, 0, [])
+    end
+
+    def _split([], _expected_count, _count_taken, taken) do
+      { Enum.reverse(taken), [] }
+    end
+
+    def _split([head|tail], expected_count, count_taken, taken) do
+      if count_taken < expected_count do
+        _split(tail, expected_count, count_taken + 1, [head|taken])
+      else
+        # TODO: avoid Enum.reverse here (no library call)
+        # TODO: rewrite to avoid bogus head + tail here
+        { Enum.reverse(taken), [head|tail] }
+      end
+    end
+  end
+
+  test "ListsAndRecursion-5/split" do
+    assert MyEnumSplit.split([1, 2, 3], 2) == { [1, 2], [3] }
+    assert MyEnumSplit.split([1, 2, 3, 4, 5], 2) == { [1, 2], [3, 4, 5] }
+    assert MyEnumSplit.split([], 2) == { [], [] }
+    assert MyEnumSplit.split([1, 2, 3], 10) == {[1, 2, 3], []}
+    assert MyEnumSplit.split([1, 2, 3], 0) == {[], [1, 2, 3]}
+    # TODO: make this work on negative numbers in that range
+    # assert MyEnumSplit.split([1, 2, 3], -1) == {[1, 2], [3]}
+    assert MyEnumSplit.split([1, 2, 3], -5) == {[], [1, 2, 3]}
+  end
+
+  defmodule MyEnumTake do
+    def take(collection, count) do
+      Enum.reverse(_take(collection, count, []))
+    end
+
+    def _take([], _count, accumulator) do
+      accumulator
+    end
+
+    def _take([head|tail], count, accumulator) do
+      if count > 0 do
+        _take(tail, count - 1, [head|accumulator])
+      else
+        accumulator
+      end
+    end
+  end
+
+  test "ListsAndRecursion-5/take" do
+    assert MyEnumTake.take([1, 2, 3], 2) == [1, 2]
+    assert MyEnumTake.take([1, 2, 3], 10) == [1, 2, 3]
+    assert MyEnumTake.take([1, 2, 3], 0) == []
+    assert MyEnumTake.take([1], 2) == [1]
+  end
 end
