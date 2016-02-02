@@ -1,5 +1,5 @@
 defmodule WebHelloWorld.Router do
-  use WebHelloWorld.Web, :router
+  use Phoenix.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
