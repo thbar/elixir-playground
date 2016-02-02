@@ -1,12 +1,4 @@
 defmodule WebHelloWorld.Web do
-  def controller do
-    quote do
-      use Phoenix.Controller
-
-      import WebHelloWorld.Router.Helpers
-    end
-  end
-
   def router do
     quote do
       use Phoenix.Router

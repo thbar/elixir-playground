@@ -1,5 +1,5 @@
 defmodule WebHelloWorld.PageController do
-  use WebHelloWorld.Web, :controller
+  use Phoenix.Controller
 
   def index(conn, _params) do
     json conn, %{hello: "world"}
