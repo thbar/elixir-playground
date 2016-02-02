@@ -9,7 +9,6 @@ defmodule WebHelloWorld.Endpoint do
     pass: ["*/*"],
     json_decoder: Poison
 
-  plug Plug.MethodOverride
   plug Plug.Head
 
   plug WebHelloWorld.Router
