@@ -18,7 +18,7 @@ defmodule WebHelloWorld.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {WebHelloWorld, []},
-     applications: [:phoenix, :phoenix_html, :cowboy, :logger, :gettext ]]
+     applications: [:phoenix, :cowboy, :logger, :gettext ]]
   end
 
   # Specifies which paths to compile per environment.
@@ -30,7 +30,6 @@ defmodule WebHelloWorld.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [{:phoenix, "~> 1.1.4"},
-     {:phoenix_html, "~> 2.4"},
      {:gettext, "~> 0.9"},
      {:cowboy, "~> 1.0"}]
   end
