@@ -9,8 +9,6 @@ defmodule WebHelloWorld do
     children = [
       # Start the endpoint when the application starts
       supervisor(WebHelloWorld.Endpoint, []),
-      # Start the Ecto repository
-      supervisor(WebHelloWorld.Repo, []),
       # Here you could define other workers and supervisors as children
       # worker(WebHelloWorld.Worker, [arg1, arg2, arg3]),
     ]
