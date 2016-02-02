@@ -10,7 +10,7 @@ config :web_hello_world, WebHelloWorld.Endpoint,
   url: [host: "localhost"],
   root: Path.dirname(__DIR__),
   secret_key_base: "0xlpimGLEI2lrYfY+2KySS4qaKArkFxi2HoXVZ8oBb46mmfPmCjpveG3CE1l3OpU",
-  render_errors: [accepts: ~w(html json)],
+  render_errors: [accepts: ~w(json)],
   pubsub: [name: WebHelloWorld.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
