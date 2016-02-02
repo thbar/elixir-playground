@@ -17,6 +17,7 @@ defmodule WebHelloWorld.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {WebHelloWorld, []},
+    # I tried to remove :logger but I get an exception
      applications: [:phoenix, :cowboy, :logger]]
   end
 
