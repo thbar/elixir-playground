@@ -9,7 +9,6 @@ defmodule WebHelloWorld.Mixfile do
      compilers: [:phoenix] ++ Mix.compilers,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     aliases: aliases,
      deps: deps]
   end
 
@@ -31,9 +30,5 @@ defmodule WebHelloWorld.Mixfile do
   defp deps do
     [{:phoenix, "~> 1.1.4"},
      {:cowboy, "~> 1.0"}]
-  end
-
-  defp aliases do
-    []
   end
 end
