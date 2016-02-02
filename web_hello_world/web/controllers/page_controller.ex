@@ -2,6 +2,6 @@ defmodule WebHelloWorld.PageController do
   use WebHelloWorld.Web, :controller
 
   def index(conn, _params) do
-    render conn, "index.html"
+    json conn, %{hello: "world"}
   end
 end
