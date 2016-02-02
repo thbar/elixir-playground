@@ -17,11 +17,10 @@ defmodule WebHelloWorld.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {WebHelloWorld, []},
-     applications: [:phoenix, :cowboy, :logger ]]
+     applications: [:phoenix, :cowboy, :logger]]
   end
 
-  # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "web", "test/support"]
+  # Specifies which paths to compile
   defp elixirc_paths(_),     do: ["lib", "web"]
 
   # Specifies your project dependencies.
