@@ -1,7 +1,6 @@
 defmodule WebHelloWorld.Endpoint do
   use Phoenix.Endpoint, otp_app: :web_hello_world
 
-  socket "/socket", WebHelloWorld.UserSocket
 
   # Serve at "/" the static files from "priv/static" directory.
   #
