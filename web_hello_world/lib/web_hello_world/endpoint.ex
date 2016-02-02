@@ -12,10 +12,5 @@ defmodule WebHelloWorld.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
 
-  plug Plug.Session,
-    store: :cookie,
-    key: "_web_hello_world_key",
-    signing_salt: "dhdyGopT"
-
   plug WebHelloWorld.Router
 end
