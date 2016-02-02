@@ -21,7 +21,6 @@ defmodule WebHelloWorld.Web do
       use Phoenix.Controller
 
       import WebHelloWorld.Router.Helpers
-      import WebHelloWorld.Gettext
     end
   end
 
@@ -36,7 +35,6 @@ defmodule WebHelloWorld.Web do
       use Phoenix.Channel
 
       alias WebHelloWorld.Repo
-      import WebHelloWorld.Gettext
     end
   end
 
