@@ -1,8 +1,8 @@
-defmodule WebHelloWorld.Mixfile do
+defmodule MyMixfile do
   use Mix.Project
 
   def project do
-    [app: :web_hello_world,
+    [app: :my_application,
      version: "0.0.1",
      elixir: "~> 1.0",
      elixirc_paths: elixirc_paths(Mix.env),
@@ -16,7 +16,7 @@ defmodule WebHelloWorld.Mixfile do
   #
   # Type `mix help compile.app` for more information.
   def application do
-    [mod: {WebHelloWorld, []},
+    [mod: {MyApplication, []},
     # I tried to remove :logger but I get an exception
      applications: [:phoenix, :cowboy, :logger]]
   end

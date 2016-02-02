@@ -6,7 +6,7 @@
 use Mix.Config
 
 # Configures the endpoint
-config :web_hello_world, WebHelloWorld.Endpoint,
+config :my_application, MyEndpoint,
   url: [host: "localhost"],
   root: Path.dirname(__DIR__),
   render_errors: [accepts: ~w(json)]

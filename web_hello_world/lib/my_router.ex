@@ -1,13 +1,13 @@
-defmodule WebHelloWorld.Router do
+defmodule MyRouter do
   use Phoenix.Router
 
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  scope "/", WebHelloWorld do
+  scope "/" do
     pipe_through :api
 
-    get "/", PageController, :index
+    get "/", MyController, :index
   end
 end
