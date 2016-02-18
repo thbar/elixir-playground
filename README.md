@@ -17,4 +17,19 @@ elixir *_test.exs
 
 # launch interactive session with mix setup
 iex -S mix
+
+# launch phoenix with iex session
+iex -S mix phoenix.server
+
+# visually inspect applications from iex
+:observer.start()
 ```
+
+## Creating a minimalistic phoenix app
+
+```
+mix phoenix.new web_hello_world --no-brunch
+mix deps.get
+```
+
+(then truncate loads of stuff)
