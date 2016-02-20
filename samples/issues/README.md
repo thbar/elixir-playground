@@ -8,6 +8,9 @@ mix run -e 'IO.puts Issues.CLI.run(["--help"])'
 
 # run all the tests
 mix test
+
+# automatically run tests on file save
+mix test.watch
 ```
 
 ## Things I want to check out
