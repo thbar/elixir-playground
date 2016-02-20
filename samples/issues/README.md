@@ -11,6 +11,11 @@ mix test
 
 # automatically run tests on file save
 mix test.watch
+
+# run one thing from interactive shell
+iex -S mix
+# then in iex:
+Issues.GitHub.fetch_issues("thbar", "kiba")
 ```
 
 ## Things I want to check out
