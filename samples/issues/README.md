@@ -5,4 +5,11 @@ Note that I'm purposely not following that chapter flow, but rather implement it
 ```
 # invoke the CLI parsing manually
 mix run -e 'IO.puts Issues.CLI.run(["--help"])'
+
+# run all the tests
+mix test
 ```
+
+## Things I want to check out
+
+- [ ] How to use a "RSpec documentation" type of ExUnit formatter, rather than dots?

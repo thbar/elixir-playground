@@ -33,3 +33,8 @@ mix deps.get
 ```
 
 (then truncate loads of stuff)
+
+## Useful resources
+
+* [Elixir CheatSheet](https://media.pragprog.com/titles/elixir/ElixirCheat.pdf)
+* [Awesome Elixir](https://github.com/h4cc/awesome-elixir)
