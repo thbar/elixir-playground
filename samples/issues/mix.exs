@@ -27,6 +27,9 @@ defmodule Issues.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:mix_test_watch, "~> 0.2", only: :dev}]
+    [
+      {:httpoison, "~> 0.8.1"},
+      {:mix_test_watch, "~> 0.2", only: :dev}
+    ]
   end
 end
