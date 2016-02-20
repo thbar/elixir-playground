@@ -1,10 +1,10 @@
 defmodule Issues.GitHub do
   def fetch_issues(user, project) do
-    url = issues_url(user, project)
+    issues_url(user, project)
     # TODO: add user agent, but verify and understand the data structure
     # passed as a parameter first
-    response = HTTPoison.get(url)
-    handle_response(response)
+    |> HTTPoison.get
+    |> handle_response
   end
 
   def issues_url(user, project) do
