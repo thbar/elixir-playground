@@ -2,8 +2,9 @@ defmodule CLITest do
   use ExUnit.Case
 
   test "parse_args returns :help when passing --help" do
-    import Issues.CLI
+    # NOTE: this syntax works inside a do block apparently
+    import Issues.CLI, only: [ parse_args: 1]
 
-    assert run(["--help"]) == :help
+    assert parse_args(["--help"]) == :help
   end
 end
