@@ -7,7 +7,7 @@ defmodule Issues.GitHub do
     handle_response(response)
   end
 
-  def issues_url(user, project)
+  def issues_url(user, project) do
     "https://api.github.com/repos/#{user}/#{project}/issues"
   end
 
