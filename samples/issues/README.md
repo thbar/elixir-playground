@@ -1,6 +1,6 @@
 # Issues
 
-**TODO: Add description**
+This is my implementation of the exercise in chapter 13 of "Programming Elixir".
 
 ## Installation
 
