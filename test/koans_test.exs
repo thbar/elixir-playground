@@ -44,7 +44,7 @@ defmodule KoansTest do
       { _, error } -> :file.format_error(error)
     end
 
-    output = handle_open.(File.open("koans_test.exs"))
+    output = handle_open.(File.open("test/koans_test.exs"))
     assert String.contains?(output, "KoansTest")
 
     output = handle_open.(File.open("do_not_exist"))
@@ -691,7 +691,8 @@ defmodule KoansTest do
     def flatten(list) do
     end
   end
-
+  
+  @tag :pending
   test "ListsAndRecursion-6/flatten" do
     assert MyListFlatten.flatten([ 1, [ 2, 3, [4], 5, [[[6]]]]]) == [1,2,3,4,5,6]
 #    assert List.flatten([ 1, [ 2, 3, [4], 5, [[[6]]]]]) == [1,2,3,4,5,6]
