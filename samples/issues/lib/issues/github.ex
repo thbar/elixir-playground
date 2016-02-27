@@ -11,7 +11,13 @@ defmodule Issues.GitHub do
     "https://api.github.com/repos/#{user}/#{project}/issues"
   end
 
+  # TODO: :ok is idiomatic here, but check in other implementations
   def handle_response({ :ok, %{status_code: 200, body: body}}) do
     Poison.Parser.parse(body)
+  end
+
+  def handle_response({ _, %{status_code: ___, body: body}}) do
+    # TODO: handle Poison parsing error - this is not the right way to do it since it can fail
+    { :error, Poison.Parser.parse(body) }
   end
 end
