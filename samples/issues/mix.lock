@@ -5,4 +5,5 @@
   "idna": {:hex, :idna, "1.0.3"},
   "mimerl": {:hex, :mimerl, "1.0.2"},
   "mix_test_watch": {:hex, :mix_test_watch, "0.2.5"},
+  "poison": {:hex, :poison, "2.1.0"},
   "ssl_verify_hostname": {:hex, :ssl_verify_hostname, "1.0.5"}}

@@ -29,6 +29,7 @@ defmodule Issues.Mixfile do
   defp deps do
     [
       {:httpoison, "~> 0.8.1"},
+      {:poison, "~> 2.1"},
       {:mix_test_watch, "~> 0.2", only: :dev}
     ]
   end
