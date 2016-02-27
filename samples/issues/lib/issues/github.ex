@@ -12,6 +12,6 @@ defmodule Issues.GitHub do
   end
 
   def handle_response({ :ok, %{status_code: 200, body: body}}) do
-    IO.puts body
+    Poison.Parser.parse(body)
   end
 end

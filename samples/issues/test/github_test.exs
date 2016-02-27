@@ -4,6 +4,6 @@ defmodule GitHubTest do
   test "fetches data" do
     import Issues.GitHub, only: [ fetch_issues: 2]
 
-    fetch_issues("thbar", "kiba")
+    Apex.ap fetch_issues("thbar", "kiba")
   end
 end
