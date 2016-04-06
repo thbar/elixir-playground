@@ -697,4 +697,11 @@ defmodule KoansTest do
     assert MyListFlatten.flatten([ 1, [ 2, 3, [4], 5, [[[6]]]]]) == [1,2,3,4,5,6]
 #    assert List.flatten([ 1, [ 2, 3, [4], 5, [[[6]]]]]) == [1,2,3,4,5,6]
   end
+  
+  test "OptionParser" do
+    # first arg must be an array!
+    {parsed, _argv, errors} = OptionParser.parse(["--help"], switches: [help: :boolean])
+    assert errors == []
+    assert parsed[:help] == true
+  end
 end
