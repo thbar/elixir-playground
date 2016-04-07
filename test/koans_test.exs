@@ -247,8 +247,12 @@ defmodule KoansTest do
   test "ModulesAndFunctions-7 env var" do
     # not overly needed, but just to practice a bit
     import System, only: [get_env: 1]
-
-    assert get_env("_system_name") == "OSX"
+    
+    if get_env("TRAVIS") == "true" do
+      assert get_env("_system_name") == "Ubuntu"
+    else
+      assert get_env("_system_name") == "OSX"
+    end
   end
 
   test "ModulesAndFunctions-7 ext name" do
