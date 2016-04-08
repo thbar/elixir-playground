@@ -1,2 +1,0 @@
-defmodule Issues do
-end
