@@ -1,4 +1,6 @@
 %{"bunt": {:hex, :bunt, "0.1.5"},
   "credo": {:hex, :credo, "0.3.11"},
   "dogma": {:hex, :dogma, "0.1.4"},
+  "fs": {:hex, :fs, "0.9.2"},
+  "mix_test_watch": {:hex, :mix_test_watch, "0.2.6"},
   "poison": {:hex, :poison, "2.1.0"}}
