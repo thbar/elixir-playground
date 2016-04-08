@@ -23,6 +23,9 @@ iex -S mix phoenix.server
 
 # visually inspect applications from iex
 :observer.start()
+
+# run one function
+mix run -e "Issues.CLI.process(:help)"
 ```
 
 ## Creating a minimalistic phoenix app
