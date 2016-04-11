@@ -31,7 +31,9 @@ defmodule Issues.Mixfile do
       {:dogma, "~> 0.1", only: :dev},
       {:credo, "~> 0.3", only: [:dev, :test]},
       {:mix_test_watch, "~> 0.2", only: :dev},
-      {:httpoison, "~> 0.8.3"}
+      {:httpoison, "~> 0.8.3"},
+      {:poison, "~> 2.1"},
+      {:apex, "~>0.4.0", only: [:dev, :test]}
     ]
   end
 end

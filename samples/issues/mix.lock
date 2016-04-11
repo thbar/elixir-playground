@@ -1,4 +1,5 @@
-%{"bunt": {:hex, :bunt, "0.1.5"},
+%{"apex": {:hex, :apex, "0.4.0"},
+  "bunt": {:hex, :bunt, "0.1.5"},
   "certifi": {:hex, :certifi, "0.4.0"},
   "credo": {:hex, :credo, "0.3.11"},
   "dogma": {:hex, :dogma, "0.1.4"},
