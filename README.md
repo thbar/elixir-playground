@@ -1,5 +1,7 @@
 Spoiler ahead! In this repository's `koans/koans_test.exs`, I'm storing my own solutions to the exercises found in [Programming Elixir](https://pragprog.com/book/elixir12/programming-elixir-1-2).
 
+[![Build Status](https://travis-ci.org/thbar/elixir-playground.svg?branch=master)](https://travis-ci.org/thbar/elixir-playground)
+
 ## Common tasks
 
 ```
