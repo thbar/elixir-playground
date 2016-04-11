@@ -6,5 +6,8 @@ mix local.hex --force
 mix deps.get
 
 mix test
-mix credo list
-mix dogma
+
+if [ "$CI" == "" ]; then
+  mix credo list
+  mix dogma
+fi
