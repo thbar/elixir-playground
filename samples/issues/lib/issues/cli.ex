@@ -22,6 +22,11 @@ defmodule Issues.CLI do
   def process({user, project, _count}) do
     Issues.GithubIssues.fetch(user, project)
     |> decode_response
+    |> convert_to_list_of_maps
+  end
+  
+  def convert_to_list_of_maps(list) do
+    Enum.map(list, &Enum.into(&1, Map.new))
   end
   
   def decode_response({:ok, body}), do: body
