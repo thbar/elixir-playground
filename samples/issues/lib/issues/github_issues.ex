@@ -1,5 +1,7 @@
 defmodule Issues.GithubIssues do
   @user_agent [{"User-agent", "Elixir dave@pragprog.com"}]
+  @github_url Application.get_env(:issues, :github_url)
+
   @moduledoc """
     A central place to query for Github issues
   """
@@ -11,7 +13,7 @@ defmodule Issues.GithubIssues do
   end
   
   def issues_url(user, project) do
-    "https://api.github.com/repos/#{user}/#{project}/issues"
+    "{@github_url}/repos/#{user}/#{project}/issues"
   end
 
   # TODO: find a DRYer way to implement this.
