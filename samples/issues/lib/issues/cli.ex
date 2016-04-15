@@ -25,6 +25,7 @@ defmodule Issues.CLI do
     |> convert_to_list_of_maps
     |> sort_into_ascending_order
     |> Enum.take(count)
+    |> Tableizer.tableize(["number", "created_at", "title"])
   end
   
   def sort_into_ascending_order(list_of_issues) do

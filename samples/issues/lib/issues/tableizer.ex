@@ -3,6 +3,7 @@ defmodule Tableizer do
   def tableize(list_of_maps, fields) do
     # for pick the right values in the right order
     values = list_of_maps
+    # TODO: fix bug with fields picking here
     |> Enum.map(&(Map.values(Map.take(&1, fields))))
     
     # I cannot call to_string on a list of atoms without an exception
