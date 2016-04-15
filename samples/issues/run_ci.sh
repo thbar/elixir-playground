@@ -7,6 +7,9 @@ mix deps.get
 
 mix test
 
+mix escript.build
+./issues --help
+
 if [ "$CI" == "" ]; then
   mix credo list
   mix dogma

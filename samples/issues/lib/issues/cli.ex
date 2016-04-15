@@ -6,10 +6,11 @@ defmodule Issues.CLI do
     _n_ issues in a github project
   """
 
-  def run(argv) do
+  def main(argv) do
     argv
     |> parse_args
     |> process
+    |> IO.puts
   end
   
   def process(:help) do

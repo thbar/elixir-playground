@@ -3,3 +3,5 @@
 erl_crash.dump
 *.ez
 hello/config/dev.secret.exs
+
+samples/issues/issues
