@@ -4,9 +4,8 @@ defmodule GithubIssuesTest do
 
   import Issues.GithubIssues, only: [ fetch: 2 ]
 
-  test "reports error when not found" do
-    # TODO: build JSON using Poison or similar
-    body = "{\"message\": \"this\"}"
+  test "reports :error when not found" do
+    {:ok, body} = Poison.encode(%{"message" => "this"})
     use_cassette :stub, [
       url: "https://api.github.com/repos/thbar/unknown-project/issues", 
       body: body, 
