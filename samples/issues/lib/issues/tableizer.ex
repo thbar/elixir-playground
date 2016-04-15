@@ -1,10 +1,11 @@
 defmodule Tableizer do
   # A first ugly yet working method to format as ascii table
   def tableize(list_of_maps, fields) do
+    # I used "take" before but order was not guaranteed
+    fetcher = fn (row) -> Enum.map(fields, &(row[&1])) end
+    
     # for pick the right values in the right order
-    values = list_of_maps
-    # TODO: fix bug with fields picking here
-    |> Enum.map(&(Map.values(Map.take(&1, fields))))
+    values = Enum.map(list_of_maps, fetcher)
     
     # I cannot call to_string on a list of atoms without an exception
     # so I'm baking a working version of this here

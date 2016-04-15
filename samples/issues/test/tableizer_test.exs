@@ -4,15 +4,15 @@ defmodule TableizerTest do
 
   test "formats a list of maps" do
     output = tableize([
-      %{name: "John Barry", age: 27, foo: "bar"},
-      %{name: "Mary J Blige", age: 28, foo: "bar"}
-    ], [:age, :name])
-
+      %{name: "John Barry", zage: 27, foo: "bar"},
+      %{name: "Mary J Blige", zage: 28, foo: "bar"}
+    ], [:zage, :name])
+    
     assert output == """
-    age | name        
-    ----+-------------
-    27  | John Barry  
-    28  | Mary J Blige
+    zage | name        
+    -----+-------------
+    27   | John Barry  
+    28   | Mary J Blige
     """
   end
 end
