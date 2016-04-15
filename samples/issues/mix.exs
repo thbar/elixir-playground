@@ -33,7 +33,8 @@ defmodule Issues.Mixfile do
       {:mix_test_watch, "~> 0.2", only: :dev},
       {:httpoison, "~> 0.8.3"},
       {:poison, "~> 2.1"},
-      {:apex, "~>0.4.0", only: [:dev, :test]}
+      {:apex, "~> 0.4.0", only: [:dev, :test]},
+      {:exvcr, "~> 0.7", only: :test}
     ]
   end
 end

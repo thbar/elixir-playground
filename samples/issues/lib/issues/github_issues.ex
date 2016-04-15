@@ -13,7 +13,7 @@ defmodule Issues.GithubIssues do
   end
   
   def issues_url(user, project) do
-    "{@github_url}/repos/#{user}/#{project}/issues"
+    "#{@github_url}/repos/#{user}/#{project}/issues"
   end
 
   # TODO: find a DRYer way to implement this.
