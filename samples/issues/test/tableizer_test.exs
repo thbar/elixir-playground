@@ -33,11 +33,23 @@ defmodule TableizerTest do
     assert output == [ 6, 3, 6 ]
   end
   
+  test "justifies each column" do
+    output = stringify([
+      [:foobar,:test],
+      [5, "ok"]
+    ]) |> ljust
+    
+    assert output == [
+      ["foobar", "test"],
+      ["5     ", "ok  "]
+    ]
+  end
+  
   test "formats a list of maps" do
     output = convert_to_array([
       %{name: "John Barry", zage: 27, foo: "bar"},
       %{name: "Mary J Blige", zage: 28, foo: "bar"}
-    ], [:zage, :name]) |> stringify |> tableize
+    ], [:zage, :name]) |> stringify |> ljust |> tableize
     
     assert output == """
     zage | name        

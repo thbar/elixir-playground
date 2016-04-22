@@ -28,8 +28,7 @@ defmodule Tableizer do
     end
   end
   
-  # A first ugly yet working method to format as ascii table
-  def tableize(rows) do
+  def ljust(rows) do
     widths = compute_max_width(rows)
 
     [fields | values] = rows
@@ -41,7 +40,10 @@ defmodule Tableizer do
         String.ljust(Enum.at(row, column), Enum.at(widths, column))
       end
     end
-    
+  end
+  
+  # A first ugly yet working method to format as ascii table
+  def tableize(rows) do
     # tie everything together
     [h | v] = rows
     top = Enum.join(h, " | ") <> "\n"
