@@ -1,5 +1,4 @@
 defmodule Tableizer do
-  
   def convert_to_array(list_of_maps, fields) do
     # I used "take" before but order was not guaranteed
     fetcher = fn (row) -> Enum.map(fields, &(row[&1])) end
@@ -42,7 +41,6 @@ defmodule Tableizer do
     end
   end
   
-  # A first ugly yet working method to format as ascii table
   def tableize(rows) do
     # tie everything together
     [h | v] = rows
