@@ -17,11 +17,8 @@ defmodule Tableizer do
   end
   
   def compute_max_width(rows) do
-    [headers | _] = rows
-    columns = (0..Enum.count(headers)-1)
-
-    # which allows me to compute the width of each column
-    widths = for column <- columns do
+    columns = rows |> Enum.at(0) |> Enum.count
+    widths = for column <- (0..columns-1) do
       col_values = Enum.map(rows, &(Enum.at(&1, column)))
       Enum.reduce(col_values, 0, fn(x, max) -> Enum.max([String.length(x), max]) end)
     end
