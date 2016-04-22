@@ -1,20 +1,23 @@
 defmodule Tableizer do
-  # A first ugly yet working method to format as ascii table
-  def tableize(list_of_maps, fields) do
+  
+  def convert_to_array(list_of_maps, fields) do
     # I used "take" before but order was not guaranteed
     fetcher = fn (row) -> Enum.map(fields, &(row[&1])) end
     
     # for pick the right values in the right order
-    values = Enum.map(list_of_maps, fetcher)
-    
+    [fields | Enum.map(list_of_maps, fetcher)]
+  end
+  
+  # A first ugly yet working method to format as ascii table
+  def tableize(rows) do
     # I cannot call to_string on a list of atoms without an exception
     # so I'm baking a working version of this here
     stringify = fn (list) -> Enum.map(list, &(to_string(&1))) end
     
     # I can now convert fields and values to a list of list of strings
-    rows = [fields | values]
-    |> Enum.map(stringify)
+    rows = Enum.map(rows, stringify)
     
+    [fields | values] = rows
     columns = (0..Enum.count(fields)-1)
     
     # which allows me to compute the width of each column
