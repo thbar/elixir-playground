@@ -6,7 +6,9 @@ mix local.hex --force
 mix deps.get
 mix test
 
-# run samples tests
-cd samples/issues
-./run_ci.sh
-cd $OLDPWD
+for d in samples/*; do
+    echo "***** Building $d *****"
+    cd "$d"
+    ./run_ci.sh
+    cd $OLDPWD
+done
