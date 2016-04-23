@@ -5,6 +5,8 @@ defmodule Issues.Mixfile do
     [app: :issues,
      version: "0.0.1",
      elixir: "~> 1.2",
+     name: "Issues",
+     source_url: "https://github.com/thbar/elixir-playground/tree/master/samples/issues",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      escript: [ main_module: Issues.CLI ],
@@ -35,7 +37,9 @@ defmodule Issues.Mixfile do
       {:httpoison, "~> 0.8.3"},
       {:poison, "~> 2.1"},
       {:apex, "~> 0.4.0", only: [:dev, :test]},
-      {:exvcr, "~> 0.7", only: :test}
+      {:exvcr, "~> 0.7", only: :test},
+      {:ex_doc, "~> 0.11.4", only: :dev},
+      {:earmark, "~> 0.2.1", only: :dev}
     ]
   end
 end
