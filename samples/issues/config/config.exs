@@ -3,8 +3,14 @@
 use Mix.Config
 
 config :issues, github_url: "https://api.github.com"
-config :logger, compile_time_purge_level: :info
-config :logger, :console, format: "$date $time $metadata[$level] $levelpad$message\n"
+# TODO: split to env-specific files - yet this seems to work
+if Mix.env == :development do
+  config :logger, compile_time_purge_level: :info
+  config :logger, :console, format: "$date $time $metadata[$level] $levelpad$message\n"
+end
+if Mix.env == :test do
+  config :logger, compile_time_purge_level: :error
+end
 
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this
