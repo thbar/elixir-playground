@@ -2,11 +2,14 @@ defmodule Issues.GithubIssues do
   @user_agent [{"User-agent", "Elixir dave@pragprog.com"}]
   @github_url Application.get_env(:issues, :github_url)
 
+  require Logger
+  
   @moduledoc """
     A central place to query for Github issues
   """
 
   def fetch(user, project) do
+    Logger.info "Fetching project #{user}/#{project}"
     issues_url(user, project)
     |> HTTPoison.get(@user_agent)
     |> handle_response

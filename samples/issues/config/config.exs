@@ -3,6 +3,8 @@
 use Mix.Config
 
 config :issues, github_url: "https://api.github.com"
+config :logger, compile_time_purge_level: :info
+config :logger, :console, format: "$date $time $metadata[$level] $levelpad$message\n"
 
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this
