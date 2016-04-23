@@ -5,3 +5,5 @@ erl_crash.dump
 hello/config/dev.secret.exs
 
 samples/issues/issues
+
+samples/weather/weather
