@@ -56,6 +56,6 @@ defmodule TableizerTest do
       "zage | name        \n" <>
       "-----+-------------\n" <>
       "27   | John Barry  \n" <>
-      "28   | Mary J Blige"
+      "28   | Mary J Blige\n"
   end
 end
