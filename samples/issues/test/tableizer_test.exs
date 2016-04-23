@@ -1,5 +1,6 @@
 defmodule TableizerTest do
   use ExUnit.Case
+  doctest Tableizer
   import Tableizer
 
   test "convert a list of maps and a list of field names to an array" do

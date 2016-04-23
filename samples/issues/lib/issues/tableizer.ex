@@ -14,6 +14,14 @@ defmodule Tableizer do
     [fields | Enum.map(list_of_maps, fetcher)]
   end
 
+  @doc """
+  Convert each item to string in a list of list 
+  
+  ## Examples
+  
+      iex> Tableizer.stringify([[1, :test], [100.5, "hello"]])
+      [["1","test"],["100.5","hello"]]
+  """
   def stringify(rows) do
     # I cannot call to_string on a list of atoms without an exception
     # so I'm baking a working version of this here
