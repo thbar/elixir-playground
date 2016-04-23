@@ -49,7 +49,7 @@ defmodule Tableizer do
     # tie everything together
     [h | v] = rows
     top = Enum.join(h, " | ") <> "\n"
-    border = Enum.join(Enum.map(h, &(String.replace(&1, Regex.compile!("."), "-"))), "-+-") <> "\n"
+    border = Enum.map_join(h, "-+-", &(String.replace(&1, Regex.compile!("."), "-"))) <> "\n"
     rows = for row <- v, do: Enum.join(row, " | ") <> "\n"
     Enum.join([top | [border | rows]])
   end
