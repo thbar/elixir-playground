@@ -46,10 +46,10 @@ defmodule TableizerTest do
   end
   
   test "formats a list of maps" do
-    output = convert_to_array([
+    output = ascii_table([
       %{name: "John Barry", zage: 27, foo: "bar"},
       %{name: "Mary J Blige", zage: 28, foo: "bar"}
-    ], [:zage, :name]) |> stringify |> ljust |> tableize
+    ], [:zage, :name])
     
     assert output == """
     zage | name        

@@ -1,4 +1,11 @@
 defmodule Tableizer do
+  def ascii_table(list_of_maps, fields) do
+    convert_to_array(list_of_maps, fields)
+    |> stringify 
+    |> ljust 
+    |> tableize
+  end
+  
   def convert_to_array(list_of_maps, fields) do
     # I used "take" before but order was not guaranteed
     fetcher = fn (row) -> Enum.map(fields, &(row[&1])) end
@@ -18,7 +25,7 @@ defmodule Tableizer do
   
   def compute_max_width(rows) do
     columns = rows |> Enum.at(0) |> Enum.count
-    widths = for column <- (0..columns-1) do
+    for column <- (0..columns-1) do
       col_values = Enum.map(rows, &(Enum.at(&1, column)))
       Enum.reduce(col_values, 0, fn(x, max) -> Enum.max([String.length(x), max]) end)
     end
@@ -27,11 +34,11 @@ defmodule Tableizer do
   def ljust(rows) do
     widths = compute_max_width(rows)
 
-    [fields | values] = rows
+    [fields | _] = rows
     columns = (0..Enum.count(fields)-1)
         
     # justify each column
-    rows = for row <- rows do
+    for row <- rows do
       for column <- columns do
         String.ljust(Enum.at(row, column), Enum.at(widths, column))
       end
