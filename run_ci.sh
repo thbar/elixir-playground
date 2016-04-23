@@ -5,7 +5,6 @@ set -e
 mix local.hex --force
 mix deps.get
 mix test
-mix escript.build
 
 # run samples tests
 cd samples/issues
