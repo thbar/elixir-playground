@@ -38,7 +38,6 @@ defmodule Weather do
 
     def parse_response(response) do
       response.body
-      |> Floki.find("table td:nth-of-type(2)")
     end
   end
 end
