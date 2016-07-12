@@ -3,9 +3,6 @@
 # also mark a spec as pending with
 # @tag :pending
 
-ExUnit.start
-ExUnit.configure exclude: :pending, trace: true
-
 defmodule KoansTest do
   use ExUnit.Case, async: true
 
