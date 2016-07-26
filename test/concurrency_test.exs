@@ -60,4 +60,29 @@ defmodule ConcurrencyTest do
     end
     # no need to kill here
   end
+  
+  defmodule Chain do
+    def counter(next_pid) do
+      receive do
+        # NOTE: passing the parent PID isn't mandatory here, as it turns out
+        n ->
+          send(next_pid, n + 1)
+      end
+    end
+    
+    def create_processes(n) do
+      # a somewhat confusing (to me) way to create a chain - but anyway
+      last = Enum.reduce 1..n, self, fn (_, send_to) -> spawn(Chain, :counter, [send_to]) end
+      send last, 0
+      receive do
+        msg ->
+          assert msg == n
+      end
+    end
+  end
+  
+  test "creating many workers isn't too costly" do
+    {microsecs,true} = :timer.tc(Chain, :create_processes, [20000])
+    assert microsecs < 200_000
+  end
 end
