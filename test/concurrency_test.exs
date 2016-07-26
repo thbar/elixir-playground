@@ -127,4 +127,16 @@ defmodule ConcurrencyTest do
         :ok
     end
   end
+  
+  test "process dying can impact main process if we link them" do
+    # a test trick to make sure we are informed about the exit
+    Process.flag(:trap_exit, true)
+    spawn_link(Sayonara, :sad_function, [])
+    receive do
+      # We're only receiving this because of the trap_exit setup
+      # otherwise the process would just crash
+      {:EXIT, pid, exit_message} ->
+        assert exit_message == :sayonara
+    end
+  end
 end
