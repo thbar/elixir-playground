@@ -85,4 +85,27 @@ defmodule ConcurrencyTest do
     {microsecs,true} = :timer.tc(Chain, :create_processes, [20000])
     assert microsecs < 200_000
   end
+  
+  defmodule Bouncer do
+    def bounce do
+      receive do
+        {sender, message} -> 
+          send(sender, message)
+      end
+    end
+  end
+
+  test "undeterministic message order" do
+    fred = spawn(Bouncer, :bounce, [])
+    betty = spawn(Bouncer, :bounce, [])
+    send(fred, {self, "fred"})
+    send(betty, {self, "betty"})
+    receive do
+      _message -> 
+        # what you get here will often be fred, but sometimes betty
+        # this isn't deterministic
+        #IO.puts(message <> "\n\n")
+      after 10 -> raise "foo"
+    end
+  end
 end
