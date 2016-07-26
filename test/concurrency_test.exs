@@ -108,4 +108,23 @@ defmodule ConcurrencyTest do
       after 10 -> raise "foo"
     end
   end
+  
+  defmodule Sayonara do
+    import :timer, only: [ sleep: 1]
+
+    def sad_function do
+      sleep(250)
+      exit(:sayonara)
+    end
+  end
+  
+  test "process dying does not impact main process" do
+    spawn(Sayonara, :sad_function, [])
+    :ok = receive do
+      _msg ->
+        raise "This will not happen"
+      after 300 ->
+        :ok
+    end
+  end
 end
