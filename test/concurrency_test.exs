@@ -22,4 +22,15 @@ defmodule ConcurrencyTest do
         assert 20 == outcome
     end
   end
+  
+  test "times out on message reception" do
+    assert_raise RuntimeError, "Timed out", fn ->
+      receive do
+        {:ok, outcome} ->
+          # won't be called
+        after 10 ->
+          raise "Timed out"
+      end
+    end
+  end
 end
