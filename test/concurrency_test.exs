@@ -31,4 +31,33 @@ defmodule ConcurrencyTest do
       end
     end
   end
+  
+  defmodule RecursiveAdder do
+    # elixir doesn't have loops - use recursion
+    def add(value \\ 0) do
+      receive do
+        { _sender, :done} ->
+          # TODO: figure out how to avoid the warning without putting something here
+          "nothing"
+        { sender, number } ->
+          value = value + number
+          send sender, { :ok, value }
+          add(value)
+      end
+    end
+  end
+
+  test "recursive receive" do
+    pid = spawn(RecursiveAdder, :add, [100])
+    send(pid, {self, 10})
+    send(pid, {self, 10})
+    send(pid, {self, :done})
+    receive do
+      {:ok, new_sum} -> assert 110 == new_sum
+    end
+    receive do
+      {:ok, new_sum} -> assert 120 == new_sum
+    end
+    # no need to kill here
+  end
 end
