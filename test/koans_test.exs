@@ -678,7 +678,7 @@ defmodule KoansTest do
   end
 
   defmodule MyListFlatten do
-    def flatten(list) do
+    def flatten(_list) do
     end
   end
   
