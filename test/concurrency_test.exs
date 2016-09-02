@@ -141,4 +141,15 @@ defmodule ConcurrencyTest do
         assert exit_message == :sayonara
     end
   end
+  
+  test "monitoring lets a process spawn another without reverse notification" do
+    {_pid, _monitoring_reference} = spawn_monitor(Sayonara, :sad_function, [])
+    # NOTE: we assert on getting the :down
+    :down = receive do
+      {:DOWN, _ref, _p, _pid, _method} ->
+        :down
+      after 1000 ->
+        :after
+    end
+  end
 end
