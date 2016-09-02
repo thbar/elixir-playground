@@ -101,7 +101,8 @@ defmodule ConcurrencyTest do
     send(fred, {self, "fred"})
     send(betty, {self, "betty"})
     receive do
-      _message -> 
+      _message ->
+        assert 0 == 0 # NO-OP to avoid warning 
         # what you get here will often be fred, but sometimes betty
         # this isn't deterministic
         #IO.puts(message <> "\n\n")
