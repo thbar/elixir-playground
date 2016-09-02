@@ -137,7 +137,7 @@ defmodule ConcurrencyTest do
     receive do
       # We're only receiving this because of the trap_exit setup
       # otherwise the process would just crash
-      {:EXIT, pid, exit_message} ->
+      {:EXIT, _pid, exit_message} ->
         assert exit_message == :sayonara
     end
   end
