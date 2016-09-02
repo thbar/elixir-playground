@@ -121,6 +121,7 @@ defmodule ConcurrencyTest do
   
   test "process dying does not impact main process" do
     spawn(Sayonara, :sad_function, [])
+    # NOTE: the :ok is passed back from "after"
     :ok = receive do
       _msg ->
         raise "This will not happen"
