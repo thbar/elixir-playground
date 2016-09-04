@@ -113,8 +113,8 @@ defmodule ConcurrencyTest do
   defmodule Sayonara do
     import :timer, only: [ sleep: 1]
 
-    def sad_function do
-      sleep(250)
+    def sad_function(delay \\ 250) do
+      sleep(delay)
       exit(:sayonara)
     end
   end
@@ -147,6 +147,19 @@ defmodule ConcurrencyTest do
     # NOTE: we assert on getting the :down
     :down = receive do
       {:DOWN, _ref, _p, _pid, _method} ->
+        :down
+      after 1000 ->
+        :after
+    end
+  end
+  
+  test "calling receive after a process crash will still give us the down message" do
+    {_pid, _monitoring_reference} = spawn_monitor(Sayonara, :sad_function, [0.1])
+    :timer.sleep(1)
+    # NOTE: we assert on getting the :down
+    :down = receive do
+      {:DOWN, _ref, _p, _pid, _method} ->
+        IO.puts "WE still get here"
         :down
       after 1000 ->
         :after
