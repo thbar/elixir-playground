@@ -219,18 +219,17 @@ defmodule ConcurrencyTest do
       parent = self
       
       pids = collection
-      |> Enum.map fn (item) ->
+      |> Enum.map(fn (item) ->
         # this returns the pid
         spawn_link fn -> send(parent, {self, function.(item)}) end
-      end
-      # TODO: figure out why I cannot chain with pipe here
-      Enum.map pids, fn (pid) ->
+      end)
+      |> Enum.map(fn (pid) ->
         receive do
           # NOTE: without the ^pid we will get the outcomes in various orders
           {^pid, outcome} ->
             outcome
         end
-      end
+      end)
     end
   end
   
