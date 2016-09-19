@@ -168,7 +168,11 @@ defmodule ConcurrencyTest do
   
   defmodule TheChild do
     def ping(options) do
-      send(options.parent_pid, "Hello from child (call #{options.call})")
+      if options.raise do
+        raise "I'm failing!"
+      else
+        send(options.parent_pid, "Hello from child (call #{options.call})")
+      end
     end
   end
   
@@ -184,16 +188,29 @@ defmodule ConcurrencyTest do
   end
   
   test "WorkingWithMultipleProcesses-3" do
-    spawn_link(TheChild, :ping, [%{parent_pid: self, call: 1}])
-    spawn_link(TheChild, :ping, [%{parent_pid: self, call: 2}])
-    spawn_link(TheChild, :ping, [%{parent_pid: self, call: 3}])
+    spawn_link(TheChild, :ping, [%{parent_pid: self, call: 1, raise: false}])
     # We are not waiting inside receive when the messages are sent,
     # yet they will arrive to the parent nonetheless.
     :timer.sleep(250)
     assert [
       "Hello from child (call 1)",
-      "Hello from child (call 2)",
-      "Hello from child (call 3)"
     ] == TheParent.receive_loop
+  end
+  
+  @tag :skip
+  test "WorkingWithMultipleProcesses-4" do
+    # NOTE: this does not catch the exception, presumably because
+    # the main process is killed itself due to spawn_link
+    assert_raise RuntimeError, "I'm failing!", fn() ->
+      spawn_link(TheChild, :ping, [%{parent_pid: self, call: 1, raise: true}])
+    end
+  end
+  
+  test "WorkingWithMultipleProcesses-5" do
+    # spawn_monitor won't crash the main process, and will notify a :DOWN message
+    spawn_monitor(TheChild, :ping, [%{parent_pid: self, call: 1, raise: true}])
+    output = TheParent.receive_loop
+    assert 1 = Enum.count(output)
+    {:DOWN, _, :process, _, _} = Enum.at(output, 0)
   end
 end
