@@ -238,4 +238,68 @@ defmodule ConcurrencyTest do
   test "Parallel map" do
     assert [2, 4, 8, 16, 32] == Parallel.map([1, 2, 3, 4, 5], fn (x) -> :math.pow(2,x) end)
   end
+  
+  defmodule FibServer do
+    def work(parent) do
+      send(parent, {:ready, self})
+      receive do
+        {:compute_fibonacci, n} ->
+          send(parent, {:answer, n, compute_fibonacci(n)})
+          work(parent) # send ready again, recursively!
+        {:shutdown} ->
+          exit(:normal)
+      end
+    end
+    
+    def compute_fibonacci(0), do: 0
+    def compute_fibonacci(1), do: 1
+    def compute_fibonacci(n) do
+      compute_fibonacci(n-1) + compute_fibonacci(n-2)
+    end
+  end
+  
+  defmodule Scheduler do
+    def run(number_of_processes, module, function, input) do
+      (1..number_of_processes)
+      |> Enum.map(fn(_index) -> spawn_link(module, function, [self]) end)
+      |> schedule_work(input)
+    end
+    
+    def schedule_work(pids, work_queue, results \\ []) do
+      receive do
+        {:ready, pid} when length(work_queue) > 0 ->
+          [head | tail] = work_queue
+          send(pid, {:compute_fibonacci, head})
+          schedule_work(pids, tail, results)
+        {:ready, pid} ->
+          send pid, {:shutdown}
+          if length(pids) > 1 do
+            schedule_work(List.delete(pids, pid), work_queue, results)
+          else
+            # sort based on requested number to get something consistent
+            Enum.sort(results, fn({n1, _}, {n2, _}) -> n1 < n2 end)
+          end
+        {:answer, n, fib} ->
+          schedule_work(pids, work_queue, [ { n, fib} | results])
+      end
+    end
+  end
+  
+  test "Parallel Fibonacci runs" do
+    # Uncomment to compare on a multicore machine
+    
+    # to_process = [ 37, 37, 37, 37, 37, 37, 37 ]
+    # Enum.each 1..10, fn num_processes -> 
+    #   {time, result} = :timer.tc(
+    #     Scheduler, :run, 
+    #       [num_processes, FibServer, :work, to_process]
+    #   )
+    #   if num_processes == 1 do
+    #     IO.puts inspect result
+    #     IO.puts "\n # time (s)"
+    #   end
+    #   :io.format "~2B ~.2f~n", [num_processes, time/1000000.0]
+    # end
+  end
+  
 end
