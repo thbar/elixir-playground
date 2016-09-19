@@ -213,4 +213,28 @@ defmodule ConcurrencyTest do
     assert 1 = Enum.count(output)
     {:DOWN, _, :process, _, _} = Enum.at(output, 0)
   end
+  
+  defmodule Parallel do
+    def map(collection, function) do
+      parent = self
+      
+      pids = collection
+      |> Enum.map fn (item) ->
+        # this returns the pid
+        spawn_link fn -> send(parent, {self, function.(item)}) end
+      end
+      # TODO: figure out why I cannot chain with pipe here
+      Enum.map pids, fn (pid) ->
+        receive do
+          # NOTE: without the ^pid we will get the outcomes in various orders
+          {^pid, outcome} ->
+            outcome
+        end
+      end
+    end
+  end
+  
+  test "Parallel map" do
+    assert [2, 4, 8, 16, 32] == Parallel.map([1, 2, 3, 4, 5], fn (x) -> :math.pow(2,x) end)
+  end
 end
