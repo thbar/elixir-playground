@@ -216,6 +216,8 @@ defmodule ConcurrencyTest do
   
   defmodule Parallel do
     def map(collection, function) do
+      # Re Exercise: WorkingWithMultipleProcesses-6
+      # we save the parent as we could not get it from inside the child fn call
       parent = self
       
       pids = collection
