@@ -220,7 +220,7 @@ defmodule ConcurrencyTest do
       # we save the parent as we could not get it from inside the child fn call
       parent = self
       
-      pids = collection
+      collection
       |> Enum.map(fn (item) ->
         # this returns the pid
         spawn_link fn -> send(parent, {self, function.(item)}) end
