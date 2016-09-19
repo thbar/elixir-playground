@@ -165,4 +165,35 @@ defmodule ConcurrencyTest do
         :after
     end
   end
+  
+  defmodule TheChild do
+    def ping(options) do
+      send(options.parent_pid, "Hello from child (call #{options.call})")
+    end
+  end
+  
+  defmodule TheParent do
+    def receive_loop(result \\ []) do
+      receive do
+        message -> 
+          receive_loop([message | result])
+        after 10 ->
+          Enum.reverse(result)
+      end
+    end
+  end
+  
+  test "WorkingWithMultipleProcesses-3" do
+    spawn_link(TheChild, :ping, [%{parent_pid: self, call: 1}])
+    spawn_link(TheChild, :ping, [%{parent_pid: self, call: 2}])
+    spawn_link(TheChild, :ping, [%{parent_pid: self, call: 3}])
+    # We are not waiting inside receive when the messages are sent,
+    # yet they will arrive to the parent nonetheless.
+    :timer.sleep(250)
+    assert [
+      "Hello from child (call 1)",
+      "Hello from child (call 2)",
+      "Hello from child (call 3)"
+    ] == TheParent.receive_loop
+  end
 end
