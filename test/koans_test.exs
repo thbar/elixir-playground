@@ -1,7 +1,4 @@
-# You can require a file using:
-# Code.load_file("sublist.exs")
-# also mark a spec as pending with
-# @tag :pending
+Code.require_file "test/test_helper.exs"
 
 defmodule KoansTest do
   use ExUnit.Case, async: true

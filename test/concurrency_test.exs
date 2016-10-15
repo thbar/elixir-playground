@@ -1,3 +1,5 @@
+Code.require_file "test/test_helper.exs"
+
 defmodule ConcurrencyTest do
   use ExUnit.Case, async: true
   
