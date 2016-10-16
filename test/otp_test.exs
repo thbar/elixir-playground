@@ -49,4 +49,73 @@ defmodule OTPTest do
     
     assert ["hello", "world"] == Storage.read(pid)
   end
+  
+  defmodule Cache do
+    use GenServer
+    
+    @name Cache
+    
+    def start_link(opts \\ []) do
+      GenServer.start_link(__MODULE__, %{}, opts ++ [name: @name])
+    end
+    
+    def write(key, value) do
+      GenServer.cast(@name, {:write, key, value})
+    end
+    
+    def read(key) do
+      GenServer.call(@name, {:read, key})
+    end
+    
+    def delete(key) do
+      GenServer.call(@name, {:delete, key})
+    end
+    
+    def exist?(key) do
+      GenServer.call(@name, {:exist?, key})
+    end
+    
+    def clear do
+      GenServer.cast(@name, {:clear})
+    end
+    
+    def handle_call({:read, key}, _from, state) do
+      {:reply, Map.get(state, key), state}
+    end
+    
+    def handle_call({:delete, key}, _from, state) do
+      {:reply, Map.get(state, key), Map.delete(state, key)}
+    end
+    
+    def handle_call({:exist?, key}, _from, state) do
+      {:reply, Map.has_key?(state, key), state}
+    end
+
+    def handle_cast({:write, key, value}, state) do
+      {:noreply, Map.put(state, key, value)}
+    end
+    
+    def handle_cast({:clear}, _state) do
+      {:noreply, %{}}
+    end
+  end
+  
+  test "cache server" do
+    Cache.start_link
+
+    Cache.write(:stooges, ["Larry", "Curly", "Moe"])
+    assert ["Larry", "Curly", "Moe"] == Cache.read(:stooges)
+
+    assert true = Cache.exist?(:stooges)
+
+    assert ["Larry", "Curly", "Moe"] == Cache.delete(:stooges)
+    assert nil == Cache.read(:stooges)
+    assert false == Cache.exist?(:stooges)
+
+    Cache.write(:stooges, ["Larry", "Curly", "Moe"])
+    assert ["Larry", "Curly", "Moe"] == Cache.read(:stooges)
+    Cache.clear
+    assert nil == Cache.read(:stooges)
+    assert false == Cache.exist?(:stooges)
+  end
 end
