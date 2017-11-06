@@ -17,7 +17,7 @@ defmodule ConcurrencyTest do
     # run it in a separate process
     pid = spawn(Computator, :double, [])
     # send a message with the number we want to double
-    send pid, {self, 10}
+    send pid, {self(), 10}
     # wait for the spawned process to send something back to us
     receive do
       {:ok, outcome} ->
@@ -51,9 +51,9 @@ defmodule ConcurrencyTest do
 
   test "recursive receive" do
     pid = spawn(RecursiveAdder, :add, [100])
-    send(pid, {self, 10})
-    send(pid, {self, 10})
-    send(pid, {self, :done})
+    send(pid, {self(), 10})
+    send(pid, {self(), 10})
+    send(pid, {self(), :done})
     receive do
       {:ok, new_sum} -> assert 110 == new_sum
     end
@@ -74,7 +74,7 @@ defmodule ConcurrencyTest do
     
     def create_processes(n) do
       # a somewhat confusing (to me) way to create a chain - but anyway
-      last = Enum.reduce 1..n, self, fn (_, send_to) -> spawn(Chain, :counter, [send_to]) end
+      last = Enum.reduce 1..n, self(), fn (_, send_to) -> spawn(Chain, :counter, [send_to]) end
       send last, 0
       receive do
         msg ->
@@ -100,8 +100,8 @@ defmodule ConcurrencyTest do
   test "undeterministic message order" do
     fred = spawn(Bouncer, :bounce, [])
     betty = spawn(Bouncer, :bounce, [])
-    send(fred, {self, "fred"})
-    send(betty, {self, "betty"})
+    send(fred, {self(), "fred"})
+    send(betty, {self(), "betty"})
     receive do
       _message ->
         assert 0 == 0 # NO-OP to avoid warning 
@@ -190,7 +190,7 @@ defmodule ConcurrencyTest do
   end
   
   test "WorkingWithMultipleProcesses-3" do
-    spawn_link(TheChild, :ping, [%{parent_pid: self, call: 1, raise: false}])
+    spawn_link(TheChild, :ping, [%{parent_pid: self(), call: 1, raise: false}])
     # We are not waiting inside receive when the messages are sent,
     # yet they will arrive to the parent nonetheless.
     :timer.sleep(250)
@@ -204,13 +204,13 @@ defmodule ConcurrencyTest do
     # NOTE: this does not catch the exception, presumably because
     # the main process is killed itself due to spawn_link
     assert_raise RuntimeError, "I'm failing!", fn() ->
-      spawn_link(TheChild, :ping, [%{parent_pid: self, call: 1, raise: true}])
+      spawn_link(TheChild, :ping, [%{parent_pid: self(), call: 1, raise: true}])
     end
   end
   
   test "WorkingWithMultipleProcesses-5" do
     # spawn_monitor won't crash the main process, and will notify a :DOWN message
-    spawn_monitor(TheChild, :ping, [%{parent_pid: self, call: 1, raise: true}])
+    spawn_monitor(TheChild, :ping, [%{parent_pid: self(), call: 1, raise: true}])
     output = TheParent.receive_loop
     assert 1 = Enum.count(output)
     {:DOWN, _, :process, _, _} = Enum.at(output, 0)
@@ -220,12 +220,12 @@ defmodule ConcurrencyTest do
     def map(collection, function) do
       # Re Exercise: WorkingWithMultipleProcesses-6
       # we save the parent as we could not get it from inside the child fn call
-      parent = self
+      parent = self()
       
       collection
       |> Enum.map(fn (item) ->
         # this returns the pid
-        spawn_link fn -> send(parent, {self, function.(item)}) end
+        spawn_link fn -> send(parent, {self(), function.(item)}) end
       end)
       |> Enum.map(fn (pid) ->
         receive do
@@ -243,7 +243,7 @@ defmodule ConcurrencyTest do
   
   defmodule FibServer do
     def work(parent) do
-      send(parent, {:ready, self})
+      send(parent, {:ready, self()})
       receive do
         {:compute_fibonacci, n} ->
           send(parent, {:answer, n, compute_fibonacci(n)})
@@ -263,7 +263,7 @@ defmodule ConcurrencyTest do
   defmodule Scheduler do
     def run(number_of_processes, module, function, input) do
       (1..number_of_processes)
-      |> Enum.map(fn(_index) -> spawn_link(module, function, [self]) end)
+      |> Enum.map(fn(_index) -> spawn_link(module, function, [self()]) end)
       |> schedule_work(input)
     end
     
