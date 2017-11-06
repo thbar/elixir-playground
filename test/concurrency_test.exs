@@ -304,6 +304,4 @@ defmodule ConcurrencyTest do
     # end
   end
   
-  test "WorkingWithMultipleProcesses-9"
-  
 end
