@@ -249,7 +249,7 @@ defmodule KoansTest do
     # raise error unless exit code is 0, using pattern matching
     {output, 0} = System.cmd("pwd", [])
 
-    assert output |> String.strip == File.cwd!()
+    assert output |> String.trim == File.cwd!()
   end
 
   test "ModulesAndFunctions-7 parsing JSON" do
@@ -453,40 +453,40 @@ defmodule KoansTest do
     # you can convert a map into an Enum to then leverage Dict
 
     # you can add a new key too
-    map = Dict.put(map, :age, 30)
+    map = Map.put(map, :age, 30)
     assert map.age == 30
     # but this also works to replace an existing key
-    map = Dict.put(map, :age, 40)
+    map = Map.put(map, :age, 40)
     assert map.age == 40
 
     # values are reachable too
     prices = %{first: 10, second: 20}
-    total = prices |> Dict.values |> Enum.sum
+    total = prices |> Map.values |> Enum.sum
     assert total == 30
   end
 
-  test "HashDict" do
+  test "Keyword-1" do
     # it's actually a list of 2-tuples, I think
-    hash_dict = [one: 1, two: 2, three: 3]
-    assert hash_dict |> Dict.values |> Enum.sum == 6
-    assert hash_dict |> Dict.keys == [:one, :two, :three]
+    keywords = [one: 1, two: 2, three: 3]
+    assert keywords |> Keyword.values |> Enum.sum == 6
+    assert keywords |> Keyword.keys == [:one, :two, :three]
   end
 
   test "Enum.into" do
     # can be used to convert one type to another
     map = %{first: 1, second: 2}
-    hash_dict = Enum.into map, HashDict.new
-    assert hash_dict |> Dict.values |> Enum.sum == 3
+    map = Enum.into map, Map.new
+    assert map |> Map.values |> Enum.sum == 3
   end
 
-  test "Keyword" do
+  test "Keyword-2" do
     kw = [quantity: 4, quantity: 10]
     # via regular Dict interface
-    assert Dict.get(kw, :quantity) == 4
+    assert Keyword.get(kw, :quantity) == 4
     # via Keyword, we get the duplicates
     assert Keyword.get_values(kw, :quantity) == [4, 10]
     # but apparently the values can be retrieved fully
-    assert kw |> Dict.values |> Enum.sum == 14
+    assert kw |> Keyword.values |> Enum.sum == 14
   end
 
   test "Maps parameters pattern matching" do
@@ -547,10 +547,7 @@ defmodule KoansTest do
     # assert get_in(book, [:owner, :name]) == "Thibaut"
   end
 
-  test "Set" do
-    # HashSet is deprecated
-    _set = Enum.into 1..5, HashSet.new
-
+  test "MapSet" do
     set = Enum.into 1..5, MapSet.new
     assert MapSet.member?(set, 3) == true
   end
