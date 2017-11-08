@@ -315,5 +315,26 @@ defmodule ConcurrencyTest do
       second_task = Task.async(slow_compute)
       assert 2000 == Task.await(task) + Task.await(second_task)
     end
+
+    test "makes sure to crash the parent if the task crashes" do
+      Process.flag(:trap_exit, true)
+      task = Task.async(fn -> raise "FOOBAR" end)
+      pid = task.pid
+      assert_receive {:EXIT, ^pid, _}, 500
+    end
+
+    test "runs concurrently, respecting a given concurrency level" do
+      stream = Task.async_stream((1..10),
+        fn x ->
+          # uncomment to "see" what's happening
+          # IO.puts "Computing for #{x}"
+          # :timer.sleep(200)
+          x * 2
+        end,
+        max_concurrency: 2
+      )
+      result = Enum.map(stream, fn {:ok, result} -> result end)
+      assert [2, 4, 6, 8, 10, 12, 14, 16, 18, 20], result
+    end
   end
 end
