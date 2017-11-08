@@ -304,4 +304,16 @@ defmodule ConcurrencyTest do
     # end
   end
   
+  # https://hexdocs.pm/elixir/Task.html
+  describe "Task" do
+    test "allows to collect work value from async tasks" do
+      slow_compute = fn ->
+        :timer.sleep(1)
+        1000
+      end
+      task = Task.async(slow_compute)
+      second_task = Task.async(slow_compute)
+      assert 2000 == Task.await(task) + Task.await(second_task)
+    end
+  end
 end
