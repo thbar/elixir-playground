@@ -14,6 +14,11 @@ defmodule AdventOfCode2017.Captcha do
       0
       iex> AdventOfCode2017.Captcha.solve("91212129")
       9
+      iex> AdventOfCode2017.Captcha.solve("")
+      0
+      # This spec depends on how you interpret the request
+      iex> AdventOfCode2017.Captcha.solve("1")
+      1
   """
   def solve(input) do
     digits = input |> String.graphemes() |> Enum.map(&String.to_integer/1)
