@@ -1,3 +1,5 @@
+# NOTE: José's solution is much more functional here
+# https://gist.github.com/josevalim/978771f4f5c948504db1e88383cac8d0
 defmodule AdventOfCode2017.Captcha do
   @doc ~S"""
   The captcha requires you to review a sequence of digits (your puzzle input) and
