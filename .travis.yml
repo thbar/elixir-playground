@@ -1,7 +1,9 @@
 # doc: https://docs.travis-ci.com/user/languages/elixir/
 language: elixir
 elixir:
-  - 1.5.2
+  - 1.7.4
+otp_release:
+  - 21.1
 install:
   - echo bypass default install
 script:
