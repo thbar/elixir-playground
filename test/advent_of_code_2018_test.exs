@@ -28,4 +28,21 @@ defmodule AdventOfCode2018Test do
     input = File.read!("input/input-day-02.txt")
     assert 7872 == AdventOfCode2018.Puzzle02.solve(input)
   end
+  
+  test "jaro" do
+    input = ~S"""
+      abcde
+      fghij
+      klmno
+      pqrst
+      fguij
+      axcye
+      wvxyz
+    """
+    
+    assert "fgij" == AdventOfCode2018.Puzzle04.find(input)
+
+    input = File.read!("input/input-day-02.txt")
+    assert "tjxmoewpdkyaihvrndfluwbzc" == AdventOfCode2018.Puzzle04.find(input)
+  end
 end
