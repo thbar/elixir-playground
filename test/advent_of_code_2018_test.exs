@@ -13,4 +13,27 @@ defmodule AdventOfCode2018Test do
     questions = File.read!("input/my-input.txt")
     IO.inspect(AdventOfCode2018.Puzzle01.solve_repeat(questions))
   end
+  
+    # { at least one 2-counted letter, at least one 3-counted letter}
+    assert AdventOfCode2018.Puzzle02.compute("abcdef") == {false, false}
+    assert AdventOfCode2018.Puzzle02.compute("bababc") == {true, true}
+    assert AdventOfCode2018.Puzzle02.compute("abbcde") == {true, false}
+    assert AdventOfCode2018.Puzzle02.compute("abcccd") == {false, true}
+    assert AdventOfCode2018.Puzzle02.compute("aabcdd") == {true, false} # only count once
+    assert AdventOfCode2018.Puzzle02.compute("abcdee") == {true, false}
+    assert AdventOfCode2018.Puzzle02.compute("ababab") == {false, true} # only count once
+    
+    assert 12 == AdventOfCode2018.Puzzle02.solve(~S"""
+      abcdef
+      bababc
+      abbcde
+      abcccd
+      aabcdd
+      abcdee
+      ababab
+    """)
+    
+    input = File.read!("input/input-day-02.txt")
+    assert 7872 == AdventOfCode2018.Puzzle02.solve(input)
+  end
 end
