@@ -33,7 +33,6 @@ defmodule AdventOfCode2018.Day0301 do
     |> String.splitter("\n", trim: true)
     |> Stream.map(&String.trim/1)
     |> Stream.map(&(interpret(&1)))
-    |> Enum.map(&(&1))
   end
   
   def mark_map(map) do
