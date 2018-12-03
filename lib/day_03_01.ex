@@ -20,10 +20,8 @@ defmodule AdventOfCode2018.Day0301 do
 
     places
     |> Enum.reduce(map, fn(p, acc) -> 
-      {_, m} = Map.get_and_update(acc, p, &(
-        {&1, (if &1 do &1 else [] end) ++ [id]}
-      ))
-      m
+      val = Map.get(acc, p, [])
+      Map.put(acc, p, val ++ [id])
     end)
   end
 
