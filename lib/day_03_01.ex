@@ -52,9 +52,7 @@ defmodule AdventOfCode2018.Day0301 do
     map = input
     |> build_map
     
-    all_ids = Enum.reduce(map, MapSet.new, fn(p, acc) ->
-      MapSet.put(acc, p.id)
-    end)
+    all_ids = Enum.map(map, &(&1.id))
 
     overlapping_ids = map
     |> mark_map
@@ -63,7 +61,7 @@ defmodule AdventOfCode2018.Day0301 do
     |> List.flatten
     |> Enum.uniq
 
-    MapSet.difference(all_ids, MapSet.new(overlapping_ids))
+    MapSet.difference(MapSet.new(all_ids), MapSet.new(overlapping_ids))
     |> Enum.to_list
   end
 end
