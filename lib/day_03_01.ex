@@ -44,9 +44,8 @@ defmodule AdventOfCode2018.Day0301 do
     input
     |> build_map
     |> mark_map
-    |> Enum.reduce(0, fn({_, ids}, acc) ->
-      if Enum.count(ids) > 1 do acc + 1 else acc end
-    end)
+    |> Enum.filter(fn({_, ids}) -> Enum.count(ids) > 1 end)
+    |> Enum.count
   end
   
   def find_non_overlapping(input) do
