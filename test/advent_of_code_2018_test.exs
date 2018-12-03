@@ -45,4 +45,24 @@ defmodule AdventOfCode2018Test do
     input = File.read!("input/input-day-02.txt")
     assert "tjxmoewpdkyaihvrndfluwbzc" == AdventOfCode2018.Puzzle04.find(input)
   end
+  
+  doctest AdventOfCode2018.Day0301
+  
+  @tag :focus
+  test "count_overlap" do
+    input = """
+      #1 @ 1,3: 4x4
+      #2 @ 3,1: 4x4
+      #3 @ 5,5: 2x2
+    """
+    # input = """
+    # #1 @ 1,1: 1x1
+    # #1 @ 1,1: 1x1
+    # """
+    assert 4 == AdventOfCode2018.Day0301.count_overlap(input)
+
+    # Note: we could use stream here, but not necessary at this point
+    input = File.read!("input/input-day-3.txt")
+    assert "116489" == AdventOfCode2018.Day0301.count_overlap(input)
+  end
 end
