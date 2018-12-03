@@ -48,21 +48,28 @@ defmodule AdventOfCode2018Test do
   
   doctest AdventOfCode2018.Day0301
   
-  @tag :focus
   test "count_overlap" do
     input = """
       #1 @ 1,3: 4x4
       #2 @ 3,1: 4x4
       #3 @ 5,5: 2x2
     """
-    # input = """
-    # #1 @ 1,1: 1x1
-    # #1 @ 1,1: 1x1
-    # """
     assert 4 == AdventOfCode2018.Day0301.count_overlap(input)
 
     # Note: we could use stream here, but not necessary at this point
+    # input = File.read!("input/input-day-3.txt")
+    # assert "116489" == AdventOfCode2018.Day0301.count_overlap(input)
+  end
+  
+  test "find_non_overlapping" do
+    input = """
+      #1 @ 1,3: 4x4
+      #2 @ 3,1: 4x4
+      #3 @ 5,5: 2x2
+    """
+    assert [3] == AdventOfCode2018.Day0301.find_non_overlapping(input)
+    
     input = File.read!("input/input-day-3.txt")
-    assert "116489" == AdventOfCode2018.Day0301.count_overlap(input)
+    assert [1260] == AdventOfCode2018.Day0301.find_non_overlapping(input)
   end
 end

@@ -20,7 +20,7 @@ defmodule AdventOfCode2018.Day0301 do
   end
   
   # We store all the "pixels" in a map to count them later
-  def mark(box=%{x: x, y: y, w: w, h: h}, map) do
+  def mark(%{id: id, x: x, y: y, w: w, h: h}, map) do
     places = for i <- (0..w-1) do
       for j <- (0..h-1) do
         %{x: x + i, y: y + j}
@@ -30,24 +30,56 @@ defmodule AdventOfCode2018.Day0301 do
     places
     |> List.flatten
     |> Enum.reduce(map, fn(p, acc) -> 
-      {_, m} = Map.get_and_update(acc, p, &({&1, (&1 || 0) + 1}))
+      {_, m} = Map.get_and_update(acc, p, &(
+        {&1, (if &1 do &1 else [] end) ++ [id]}
+      ))
       m
     end)
   end
 
   # Input is analysed line by line, then we build a map of all the pixels
-  # drawn by each box, and finally we count all the pixels drawn more than once.
-  def count_overlap(input) do
-    data = input
+  # drawn by each box
+  def build_map(input) do
+    input
     |> String.splitter("\n", trim: true)
     |> Stream.map(&String.trim/1)
     |> Stream.map(&(interpret(&1)))
     |> Enum.map(&(&1))
+  end
+  
+  def mark_map(map) do
+    map
     |> Enum.reduce(Map.new, fn(p, acc) -> 
       mark(p, acc)
     end)
-    |> Enum.reduce(0, fn({_, count}, acc) ->
-      if count > 1 do acc + 1 else acc end
+  end
+  
+  # here we finally we count all the pixels drawn more than once.
+  def count_overlap(input) do
+    input
+    |> build_map
+    |> mark_map
+    |> Enum.reduce(0, fn({_, ids}, acc) ->
+      if Enum.count(ids) > 1 do acc + 1 else acc end
     end)
+  end
+  
+  def find_non_overlapping(input) do
+    map = input
+    |> build_map
+    
+    all_ids = Enum.reduce(map, MapSet.new, fn(p, acc) ->
+      MapSet.put(acc, p.id)
+    end)
+
+    overlapping_ids = map
+    |> mark_map
+    |> Enum.filter(fn({_coords, ids}) -> Enum.count(ids) > 1 end)
+    |> Enum.map((fn({_coords, ids}) -> ids end))
+    |> List.flatten
+    |> Enum.uniq
+
+    MapSet.difference(all_ids, MapSet.new(overlapping_ids))
+    |> Enum.to_list
   end
 end
