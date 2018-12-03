@@ -36,6 +36,8 @@ defmodule AdventOfCode2018.Day0301 do
 
   def mark_map(map) do
     Enum.reduce(map, Map.new(), &mark/2)
+    # we don't need the coordinates today, actually!
+    |> Map.values()
   end
 
   # here we finally we count all the pixels drawn more than once.
@@ -43,7 +45,7 @@ defmodule AdventOfCode2018.Day0301 do
     input
     |> build_map
     |> mark_map
-    |> Enum.filter(fn {_, ids} -> Enum.count(ids) > 1 end)
+    |> Enum.filter(&(Enum.count(&1) > 1))
     |> Enum.count()
   end
 
@@ -57,7 +59,6 @@ defmodule AdventOfCode2018.Day0301 do
     overlapping_ids =
       map
       |> mark_map
-      |> Enum.map(&Kernel.elem(&1, 1))
       |> Enum.filter(&(Enum.count(&1) > 1))
       |> List.flatten()
       |> Enum.uniq()
