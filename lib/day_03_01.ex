@@ -22,8 +22,7 @@ defmodule AdventOfCode2018.Day0301 do
   def mark(box = %{id: id}, map) do
     build_pixels(box)
     |> Enum.reduce(map, fn(p, acc) -> 
-      val = Map.get(acc, p, [])
-      Map.put(acc, p, val ++ [id])
+      Map.put(acc, p, Map.get(acc, p, []) ++ [id])
     end)
   end
 
