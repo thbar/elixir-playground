@@ -8,15 +8,9 @@ defmodule AdventOfCode2018.Day0301 do
   %{id: 123, x: 2, y: 10, w: 6, h: 7}
   """
   def interpret(input) do
-    data = Regex.named_captures(@regexp, input)
-
-    keys = Map.keys(data)
-    |> Enum.map(&String.to_atom(&1))
-
-    values = Map.values(data)
-    |> Enum.map(&String.to_integer(&1))
-
-    Map.new(Enum.zip(keys, values))
+    Regex.named_captures(@regexp, input)
+    |> Enum.map(fn {k,v}->{String.to_atom(k),String.to_integer(v)} end)
+    |> Map.new
   end
   
   # We store all the "pixels" in a map to count them later
