@@ -13,12 +13,14 @@ defmodule AdventOfCode2018.Day0301 do
     |> Map.new
   end
   
+  def build_pixels(%{id: id, x: x, y: y, w: w, h: h}) do
+    for i <- (0..w-1), j <- (0..h-1),
+      do: %{x: x + i, y: y + j} 
+  end
+  
   # We store all the "pixels" in a map to count them later
-  def mark(%{id: id, x: x, y: y, w: w, h: h}, map) do
-    places = for i <- (0..w-1), j <- (0..h-1),
-               do: %{x: x + i, y: y + j}
-
-    places
+  def mark(box = %{id: id}, map) do
+    build_pixels(box)
     |> Enum.reduce(map, fn(p, acc) -> 
       val = Map.get(acc, p, [])
       Map.put(acc, p, val ++ [id])
