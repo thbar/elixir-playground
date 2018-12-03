@@ -15,14 +15,10 @@ defmodule AdventOfCode2018.Day0301 do
   
   # We store all the "pixels" in a map to count them later
   def mark(%{id: id, x: x, y: y, w: w, h: h}, map) do
-    places = for i <- (0..w-1) do
-      for j <- (0..h-1) do
-        %{x: x + i, y: y + j}
-      end
-    end
+    places = for i <- (0..w-1), j <- (0..h-1),
+               do: %{x: x + i, y: y + j}
 
     places
-    |> List.flatten
     |> Enum.reduce(map, fn(p, acc) -> 
       {_, m} = Map.get_and_update(acc, p, &(
         {&1, (if &1 do &1 else [] end) ++ [id]}
