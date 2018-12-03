@@ -12,7 +12,7 @@ defmodule AdventOfCode2018.Puzzle01 do
     |> String.trim_trailing()
     |> String.split("\n")
     |> Enum.map(&String.to_integer(&1))
-    |> Enum.reduce(0, &(&1 + &2))
+    |> Enum.sum
   end
 
   @doc ~S"""
