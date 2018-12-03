@@ -56,9 +56,8 @@ defmodule AdventOfCode2018.Day0301 do
 
     overlapping_ids = map
     |> mark_map
-    |> Enum.filter(fn({_coords, ids}) -> Enum.count(ids) > 1 end)
-    |> Enum.map((fn({_coords, ids}) -> ids end))
-    |> List.flatten
+    |> Enum.map(&Kernel.elem(&1, 1))
+    |> Enum.filter(&(Enum.count(&1) > 1))
     |> Enum.uniq
 
     MapSet.difference(MapSet.new(all_ids), MapSet.new(overlapping_ids))
