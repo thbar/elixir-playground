@@ -58,6 +58,7 @@ defmodule AdventOfCode2018.Day0301 do
     |> mark_map
     |> Enum.map(&Kernel.elem(&1, 1))
     |> Enum.filter(&(Enum.count(&1) > 1))
+    |> List.flatten
     |> Enum.uniq
 
     MapSet.difference(MapSet.new(all_ids), MapSet.new(overlapping_ids))
