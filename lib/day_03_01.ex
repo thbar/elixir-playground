@@ -36,10 +36,7 @@ defmodule AdventOfCode2018.Day0301 do
   end
   
   def mark_map(map) do
-    map
-    |> Enum.reduce(Map.new, fn(p, acc) -> 
-      mark(p, acc)
-    end)
+    Enum.reduce(map, Map.new, &mark/2)
   end
   
   # here we finally we count all the pixels drawn more than once.
