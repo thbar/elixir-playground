@@ -1,4 +1,6 @@
 defmodule Day04 do
+  @regexp ~r/^\[(?<ts>(.*))\]( Guard #(?<guard_id>\d+))? (?<event>.*)$/
+  
   # Use atoms for keys + use nil rather than blank string
   def clean_input_map(map) do
     Map.new(map, fn {k, v} ->
@@ -14,15 +16,13 @@ defmodule Day04 do
   end
 
   def build_day_4_puzzle_1_data(filename) do
-    regexp = ~r/^\[(?<ts>(.*))\]( Guard #(?<guard_id>\d+))? (?<event>.*)$/
-
     # NOTE: using stream but ultimately the sorting requires everything in memory
     guards_data =
       File.stream!(filename)
       |> Stream.map(&String.trim/1)
       # NOTE: lexicographical sort equals time sort in this case
       |> Enum.sort()
-      |> Stream.map(&Regex.named_captures(regexp, &1))
+      |> Stream.map(&Regex.named_captures(@regexp, &1))
       |> Stream.map(&clean_input_map/1)
       |> Stream.transform(nil, fn item, acc ->
         new_id = item.guard_id || acc
