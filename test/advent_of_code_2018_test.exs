@@ -111,4 +111,10 @@ defmodule AdventOfCode2018Test do
     input = File.read!("input/input-day-05.txt") |> String.trim
     assert 5492 == Day0502.solve(input, &Day0501Fast.solve_fast/1)
   end
+
+  @tag :skip # takes 15 seconds
+  test "day 5 puzzle 2 (faster, parallel)" do
+    input = File.read!("input/input-day-05.txt") |> String.trim
+    assert 5492 == Day0502.solve_parallel(input, &Day0501Fast.solve_fast/1)
+  end
 end

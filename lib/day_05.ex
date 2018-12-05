@@ -77,4 +77,15 @@ defmodule Day0502 do
     
     shortest_polymer_size
   end
+  
+  def solve_parallel(input, fun) do
+    {_troubling_unit, shortest_polymer_size} = ?A..?Z
+    |> Enum.map(&(Task.async(fn -> {&1, length_without(&1, input, fun)} end)))
+    |> Enum.map(&Task.await(&1, :infinity))
+    |> Map.new
+    |> Enum.sort_by(fn({_,v}) -> v end)
+    |> List.first
+    
+    shortest_polymer_size
+  end
 end
