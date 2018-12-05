@@ -88,14 +88,26 @@ defmodule AdventOfCode2018Test do
     assert 14920 = Day04.solve_day_4_puzzle_2("input/input-day-04.txt")
   end
   
-  test "day 5 puzzle 1" do
+  @tag :skip # takes 13 seconds
+  test "day 5 puzzle 1 (slow)" do
     assert Day0501.solve("dabAcCaCBAcCcaDA") == "dabCBAcaDA"
     assert 11242 == Day0501.solve(File.read!("input/input-day-05.txt")) |> String.trim |> String.length
   end
+  
+  test "day 5 puzzle 1 (faster)" do # takes 1 second
+    assert Day0501Fast.solve_fast("dabAcCaCBAcCcaDA") == "dabCBAcaDA"
+    assert 11242 == Day0501Fast.solve_fast(File.read!("input/input-day-05.txt")) |> String.trim |> String.length
+  end
 
   @tag :skip # takes several minutes
-  test "day 5 puzzle 2" do
+  test "day 5 puzzle 2 (slow)" do
     input = File.read!("input/input-day-05.txt") |> String.trim
-    IO.puts Day0502.solve(input)
+    assert 5492 == Day0502.solve(input)
+  end
+  
+  @tag :focus
+  test "day 5 puzzle 2 (faster)" do
+    input = File.read!("input/input-day-05.txt") |> String.trim
+    assert 5492 == Day0502.solve(input, &Day0501Fast.solve_fast/1)
   end
 end
