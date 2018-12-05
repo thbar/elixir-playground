@@ -20,6 +20,43 @@ defmodule Day0501 do
   end
 end
 
+defmodule Day0501Fast do
+  def reacting_polymer?(<<u1>>, <<u2>>) do
+    abs(u1 - u2) == (?a - ?A)
+  end
+  
+  def react([], result) do
+    result
+  end
+
+  def react([current], result) do
+    result ++ [current]
+  end
+
+  def react([current | left = [next | sub_tail]], result) do
+    if reacting_polymer?(current, next) do
+      react(sub_tail, result)
+    else
+      result ++ [current] ++ react(left, result)
+    end
+  end
+
+  def react_all(input) do
+    new_result = react(input, [])
+    if new_result == input do
+      input |> Enum.join()
+    else
+      react_all(new_result)
+    end
+  end
+  
+  def solve_fast(input) do
+    input 
+    |> String.graphemes
+    |> react_all
+  end
+end
+
 defmodule Day0502 do
 
   def length_without(unit_type, input, fun) do
