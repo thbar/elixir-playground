@@ -22,20 +22,20 @@ end
 
 defmodule Day0502 do
 
-  def length_without(unit_type, input) do
+  def length_without(unit_type, input, fun) do
     IO.puts "Processing unit type #{unit_type}"
-    polymer = input
+    input
     |> String.replace(<<unit_type>>, "")
     |> String.replace(<<unit_type + ?a - ?A>>, "")
-    |> Day0501.solve()
+    |> fun.()
     |> String.length
   end
 
-  def solve(input) do
+  def solve(input, fun \\ &Day0502.length_without/1) do
     {_troubling_unit, shortest_polymer_size} = ?A..?Z
-    |> Enum.map(&({&1, length_without(&1, input)}))
+    |> Enum.map(&({&1, length_without(&1, input, fun)}))
     |> Map.new
-    |> Enum.sort_by(fn({k,v}) -> v end)
+    |> Enum.sort_by(fn({_,v}) -> v end)
     |> List.first
     
     shortest_polymer_size
