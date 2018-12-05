@@ -93,6 +93,7 @@ defmodule AdventOfCode2018Test do
     assert 11242 == Day0501.solve(File.read!("input/input-day-05.txt")) |> String.trim |> String.length
   end
 
+  @tag :skip # takes several minutes
   test "day 5 puzzle 2" do
     input = File.read!("input/input-day-05.txt") |> String.trim
     IO.puts Day0502.solve(input)
