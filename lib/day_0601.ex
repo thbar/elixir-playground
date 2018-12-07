@@ -18,23 +18,13 @@ defmodule Day0601 do
   end
   
   def bounding_box(coordinates) do
-    x1 = coordinates
-    |> Enum.map(&(elem(&1,0)))
-    |> Enum.min
-    
-    x2 = coordinates
-    |> Enum.map(&(elem(&1,0)))
-    |> Enum.max
-    
-    y1 = coordinates
-    |> Enum.map(&(elem(&1,1)))
-    |> Enum.min
-
-    y2 = coordinates
-    |> Enum.map(&(elem(&1,1)))
-    |> Enum.max
-
-    %{x1: x1-1, y1: y1-1, x2: x2+1, y2: y2+1}
+    {x, y} = Enum.unzip(coordinates)
+    %{
+      x1: Enum.min(x) - 1,
+      y1: Enum.min(y) - 1,
+      x2: Enum.max(x) + 1,
+      y2: Enum.max(y) + 1
+    }
   end
   
   def process(file) do
