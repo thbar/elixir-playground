@@ -26,11 +26,15 @@ defmodule Day0601 do
       y2: Enum.max(y) + 1
     }
   end
-  
-  def process(file) do
-    coordinates = file
+
+  def parse_coordinates(file) do
+    file
     |> File.stream!
     |> Enum.map(&parse_line/1)
+  end
+  
+  def process(file) do
+    coordinates = parse_coordinates(file)
     
     bb = bounding_box(coordinates)
     
@@ -58,6 +62,24 @@ defmodule Day0601 do
     |> Map.drop(infinites)
     |> Enum.map(fn {_,v} -> Enum.count(v) end)
     |> Enum.max
+  end
+  
+  def process_02(file, max_dist \\ 32) do
+    coordinates = parse_coordinates(file)
+    bb = bounding_box(coordinates)
+    
+    pixels = for x <- (bb.x1..bb.x2), y <- (bb.y1..bb.y2), do: {x,y}
+    
+    Enum.reduce(pixels, 0, fn(p, area_count) ->
+      sum_dist = Enum.reduce(coordinates, 0, fn(c, d) ->
+        d + taxi_dist(c, p)
+      end)
+      if sum_dist < max_dist do
+        area_count + 1
+      else
+        area_count
+      end
+    end)
   end
 end
 
