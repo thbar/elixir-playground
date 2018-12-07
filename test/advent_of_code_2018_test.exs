@@ -117,4 +117,10 @@ defmodule AdventOfCode2018Test do
     input = File.read!("input/input-day-05.txt") |> String.trim
     assert 5492 == Day0502.solve_parallel(input, &Day0501Fast.solve_fast/1)
   end
+
+  @tag :focus
+  test "day 6 puzzle 1" do
+    assert 17 == Day0601.process("input/input-day-06-sample.txt")
+    assert 3660 == Day0601.process("input/input-day-06.txt")
+  end
 end
