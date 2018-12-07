@@ -36,17 +36,10 @@ defmodule Day0601 do
     
     closest = Enum.reduce (bb.y1..bb.y2), Map.new, fn(y, acc) -> 
       Enum.reduce (bb.x1..bb.x2), acc, fn(x, acc) ->
-        border = cond do
-          x == bb.x1 -> true
-          x == bb.x2 -> true
-          y == bb.y1 -> true
-          y == bb.y2 -> true
-          true -> false
-        end
         Map.put acc, {x,y},
           %{
             closest: taxi_dist_closest(coordinates, {x,y}),
-            border: border
+            border: (x == bb.x1) || (x == bb.x2) || (y == bb.y1) || (y == bb.y2)
           }
       end
     end
