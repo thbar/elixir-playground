@@ -8,7 +8,8 @@ defmodule Playground do
       deps: [
         {:apex, "~> 1.1.0", only: [:dev, :test]},
         {:dogma, "~> 0.1.15", only: :dev},
-        {:mix_test_watch, "~> 0.5", only: :dev}
+        {:mix_test_watch, "~> 0.5", only: :dev},
+        {:ecto_sql, "~> 3.1"}
       ]
     ]
   end
