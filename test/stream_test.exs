@@ -16,7 +16,6 @@ defmodule StreamTest do
     assert stream |> Stream.drop(1) |> Stream.take(1) |> Enum.to_list() == [{"bar", "2"}]
   end
 
-  @tag :focus
   test "chunk_by/2" do
     # there is no range based on graphemes directly,
     # so I iterate on codepoints & conver to UTF-8
@@ -33,5 +32,37 @@ defmodule StreamTest do
       |> Enum.to_list()
 
     assert result == [["a", "b"], ["1", "2"], ["k"], ["6"], ["b"], ["1"]]
+  end
+
+  test "chunk_by/4 (no step)" do
+    result =
+      "FR76AB47PA26"
+      |> String.graphemes()
+      |> Stream.chunk_every(4)
+      |> Enum.map(&Enum.join(&1))
+      |> Enum.to_list()
+
+    assert result == ["FR76", "AB47", "PA26"]
+  end
+
+  test "chunk_by/4 (with step and discard)" do
+    result =
+      "ABCDEF"
+      |> String.graphemes()
+      |> Stream.chunk_every(3, 2, :discard)
+      |> Enum.map(&Enum.join(&1))
+      |> Enum.to_list()
+
+    assert result == ["ABC", "CDE"]
+  end
+
+  @tag :skip
+  test "chunk_while"
+
+  test "concat" do
+    [1..2, 3..4, 5..6]
+    |> Stream.concat()
+    |> Enum.to_list()
+    |> (&assert(&1 == [1, 2, 3, 4, 5, 6])).()
   end
 end
