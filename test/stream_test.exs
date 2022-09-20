@@ -93,9 +93,7 @@ defmodule StreamTest do
   end
 
   @tag :focus
-  # A tortuous use of "scan" to generate CSV file,
-  # using the first row keys as mandatory headers
-  test "scan" do
+  test "scan for tortuous one-pass CSV generation with first row keys as mandatory headers" do
     fetch_values_in_order = fn row, headers ->
       for h <- headers, do: Map.fetch!(row, h)
     end
@@ -104,15 +102,13 @@ defmodule StreamTest do
       %{id: 1, name: "John"},
       %{id: 2, name: "Mary"}
     ]
-    |> Stream.scan(nil, fn e, acc ->
-      case acc do
-        nil ->
-          headers = Map.keys(e)
-          {headers, [headers, fetch_values_in_order.(e, headers)]}
+    |> Stream.scan(nil, fn
+      e, nil ->
+        headers = Map.keys(e)
+        {headers, [headers, fetch_values_in_order.(e, headers)]}
 
-        {headers, _} ->
-          {headers, [fetch_values_in_order.(e, headers)]}
-      end
+      e, {headers, _} ->
+        {headers, [fetch_values_in_order.(e, headers)]}
     end)
     |> Stream.flat_map(fn {_h, rows} -> rows end)
     |> Enum.to_list()
