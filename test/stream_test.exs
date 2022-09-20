@@ -81,4 +81,41 @@ defmodule StreamTest do
     |> Enum.to_list()
     |> (&assert(&1 == [1, 101, 2, 102])).()
   end
+
+  test "intersperse" do
+    "FR76AB38XY12"
+    |> String.graphemes()
+    |> Stream.chunk_every(4)
+    |> Stream.map(&Enum.join(&1))
+    |> Stream.intersperse("-")
+    |> Enum.to_list()
+    |> (&assert(&1 == ["FR76", "-", "AB38", "-", "XY12"])).()
+  end
+
+  @tag :focus
+  # A tortuous use of "scan" to generate CSV file,
+  # using the first row keys as mandatory headers
+  test "scan" do
+    fetch_values_in_order = fn row, headers ->
+      for h <- headers, do: Map.fetch!(row, h)
+    end
+
+    [
+      %{id: 1, name: "John"},
+      %{id: 2, name: "Mary"}
+    ]
+    |> Stream.scan(nil, fn e, acc ->
+      case acc do
+        nil ->
+          headers = Map.keys(e)
+          {headers, [headers, fetch_values_in_order.(e, headers)]}
+
+        {headers, _} ->
+          {headers, [fetch_values_in_order.(e, headers)]}
+      end
+    end)
+    |> Stream.flat_map(fn {_h, rows} -> rows end)
+    |> Enum.to_list()
+    |> (&assert(&1 == [[:id, :name], [1, "John"], [2, "Mary"]])).()
+  end
 end
