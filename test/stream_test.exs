@@ -92,7 +92,6 @@ defmodule StreamTest do
     |> (&assert(&1 == ["FR76", "-", "AB38", "-", "XY12"])).()
   end
 
-  @tag :focus
   test "scan for tortuous one-pass CSV generation with first row keys as mandatory headers" do
     fetch_values_in_order = fn row, headers ->
       for h <- headers, do: Map.fetch!(row, h)
@@ -111,6 +110,28 @@ defmodule StreamTest do
         {headers, [fetch_values_in_order.(e, headers)]}
     end)
     |> Stream.flat_map(fn {_h, rows} -> rows end)
+    |> Enum.to_list()
+    |> (&assert(&1 == [[:id, :name], [1, "John"], [2, "Mary"]])).()
+  end
+
+  test "scan for much less tortuous CSV generation (with explicit headers)" do
+    fetch_values_in_order = fn row, headers ->
+      for h <- headers, do: Map.fetch!(row, h)
+    end
+
+    # this time, instead of inferring headers based on first row,
+    # we prefer to use something explicit.
+    headers = [:id, :name]
+
+    rows =
+      [
+        %{id: 1, name: "John"},
+        %{id: 2, name: "Mary"}
+      ]
+      |> Stream.map(fn row -> fetch_values_in_order.(row, headers) end)
+
+    [headers]
+    |> Stream.concat(rows)
     |> Enum.to_list()
     |> (&assert(&1 == [[:id, :name], [1, "John"], [2, "Mary"]])).()
   end
