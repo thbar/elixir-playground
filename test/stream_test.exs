@@ -65,4 +65,20 @@ defmodule StreamTest do
     |> Enum.to_list()
     |> (&assert(&1 == [1, 2, 3, 4, 5, 6])).()
   end
+
+  test "drop_while" do
+    [1..10, 1..5]
+    |> Stream.concat()
+    |> Stream.drop_while(&(&1 <= 5))
+    |> Enum.to_list()
+    |> (&assert(&1 == [6, 7, 8, 9, 10, 1, 2, 3, 4, 5])).()
+  end
+
+  test "flat_map" do
+    # useful, for instance, to generate N output items for each input item
+    1..2
+    |> Stream.flat_map(&[&1, 100 + &1])
+    |> Enum.to_list()
+    |> (&assert(&1 == [1, 101, 2, 102])).()
+  end
 end
